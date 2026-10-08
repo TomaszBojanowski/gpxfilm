@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="gpxfilm test" xmlns="http://www.topografix.com/GPX/1/1">
+<trk><name>Ślad testowy</name><trkseg>
+<trkpt lat="49.5000000" lon="20.0000000"><ele>800.0</ele><time>2025-06-14T08:00:00Z</time></trkpt>
+<trkpt lat="49.5016170" lon="20.0000000"><ele>800.0</ele><time>2025-06-14T08:01:00Z</time></trkpt>
+<trkpt lat="49.5032339" lon="20.0000000"><ele>800.0</ele><time>2025-06-14T08:02:00Z</time></trkpt>
+<trkpt lat="49.5048509" lon="20.0000000"><ele>800.0</ele><time>2025-06-14T08:03:00Z</time></trkpt>
+<trkpt lat="49.5064678" lon="20.0000000"><ele>800.0</ele><time>2025-06-14T08:04:00Z</time></trkpt>
+<trkpt lat="49.5080848" lon="20.0000000"><ele>800.0</ele><time>2025-06-14T08:05:00Z</time></trkpt>
+<trkpt lat="49.5089831" lon="20.0011066"><ele>800.0</ele><time>2025-06-14T08:06:00Z</time></trkpt>
+<trkpt lat="49.5089963" lon="20.0005534"><ele>800.0</ele><time>2025-06-14T08:07:00Z</time></trkpt>
+<trkpt lat="49.5102586" lon="20.0000000"><ele>800.0</ele><time>2025-06-14T08:08:00Z</time></trkpt>
+<trkpt lat="49.5118756" lon="20.0000000"><ele>800.0</ele><time>2025-06-14T08:09:00Z</time></trkpt>
+<trkpt lat="49.5134925" lon="20.0000000"><ele>800.0</ele><time>2025-06-14T08:10:00Z</time></trkpt>
+<trkpt lat="49.5151095" lon="20.0000000"><ele>800.0</ele><time>2025-06-14T08:11:00Z</time></trkpt>
+<trkpt lat="49.5167264" lon="20.0000000"><ele>800.0</ele><time>2025-06-14T08:12:00Z</time></trkpt>
+</trkseg></trk>
+</gpx>

@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=77", "setuptools-scm>=8"]   # the version comes from the git history
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gpxfilm"
+dynamic = ["version"]
+description = "Render an MP4 film of a GPX track on a shaded relief, topographic or aerial map"
+license = "GPL-3.0-or-later"
+license-files = ["LICENSE"]
+authors = [{ name = "Tomasz Bojanowski", email = "tomasz@bojanowski.me" }]
+requires-python = ">=3.10"
+dependencies = [
+    "numpy",
+    "scipy",
+    "pillow",
+    "certifi",
+]
+
+[project.urls]
+Homepage = "https://github.com/TomaszBojanowski/gpxfilm"
+
+[project.optional-dependencies]
+test = ["pytest"]
+
+[project.scripts]
+gpxfilm = "gpxfilm.cli:main"
+
+[tool.setuptools]
+packages = ["gpxfilm", "gpxfilm.po"]
+package-dir = { "gpxfilm.po" = "po" }   # the translations, installed inside the package
+
+[tool.setuptools.package-data]
+"gpxfilm.po" = ["*.po"]
+
+[tool.setuptools_scm]
+version_file = "gpxfilm/_version.py"
+fallback_version = "0.1.0"           # a copy of the source tree without the git history and not made by git archive
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
