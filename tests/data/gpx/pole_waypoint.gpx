@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="gpxfilm test" xmlns="http://www.topografix.com/GPX/1/1">
+<wpt lat="90.0" lon="0.0"><name>Biegun Północny</name></wpt>
+<trk><name>Ślad testowy</name><trkseg>
+<trkpt lat="78.200000" lon="15.600000"><ele>800.0</ele><time>2025-06-14T08:00:00Z</time></trkpt>
+<trkpt lat="78.200400" lon="15.600400"><ele>803.0</ele><time>2025-06-14T08:00:10Z</time></trkpt>
+<trkpt lat="78.200800" lon="15.600800"><ele>806.0</ele><time>2025-06-14T08:00:20Z</time></trkpt>
+<trkpt lat="78.201200" lon="15.601200"><ele>809.0</ele><time>2025-06-14T08:00:30Z</time></trkpt>
+<trkpt lat="78.201600" lon="15.601600"><ele>812.0</ele><time>2025-06-14T08:00:40Z</time></trkpt>
+<trkpt lat="78.202000" lon="15.602000"><ele>815.0</ele><time>2025-06-14T08:00:50Z</time></trkpt>
+<trkpt lat="78.202400" lon="15.602400"><ele>818.0</ele><time>2025-06-14T08:01:00Z</time></trkpt>
+<trkpt lat="78.202800" lon="15.602800"><ele>821.0</ele><time>2025-06-14T08:01:10Z</time></trkpt>
+<trkpt lat="78.203200" lon="15.603200"><ele>824.0</ele><time>2025-06-14T08:01:20Z</time></trkpt>
+<trkpt lat="78.203600" lon="15.603600"><ele>827.0</ele><time>2025-06-14T08:01:30Z</time></trkpt>
+<trkpt lat="78.204000" lon="15.604000"><ele>830.0</ele><time>2025-06-14T08:01:40Z</time></trkpt>
+<trkpt lat="78.204400" lon="15.604400"><ele>833.0</ele><time>2025-06-14T08:01:50Z</time></trkpt>
+</trkseg></trk>
+</gpx>

@@ -1,0 +1,33 @@
+{
+ "places": [
+  {
+   "name": "Boczań",
+   "km": 0.9
+  },
+  {
+   "name": "Przełęcz między Kopami",
+   "km": 2.0
+  },
+  {
+   "name": "Schronisko PTTK Murowaniec",
+   "km": 4.1
+  }
+ ],
+ "peaks": [
+  "Kasprowy Wierch",
+  "Mała Kopa Królowa",
+  "Nosal"
+ ],
+ "photos": {
+  "matched": 0,
+  "total": 0
+ },
+ "stops": 1,
+ "duration": 21.4,
+ "distance_km": 5.8,
+ "country": "Polska",
+ "name_languages": [
+  "en",
+  "pl"
+ ]
+}

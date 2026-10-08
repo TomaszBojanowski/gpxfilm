@@ -1,0 +1,26 @@
+{
+ "places": [
+  {
+   "name": "Biały Jar",
+   "km": 1.7
+  },
+  {
+   "name": "Dom Śląski",
+   "km": 5.0
+  }
+ ],
+ "peaks": [
+  "Kopa"
+ ],
+ "photos": {
+  "matched": 0,
+  "total": 0
+ },
+ "stops": 0,
+ "duration": 20.0,
+ "distance_km": 6.2,
+ "country": "Polska",
+ "name_languages": [
+  "pl"
+ ]
+}

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="gpxfilm test" xmlns="http://www.topografix.com/GPX/1/1">
+<trk><name>Pierwszy</name><trkseg>
+<trkpt lat="49.500000" lon="20.000000"><ele>800.0</ele></trkpt>
+<trkpt lat="49.500400" lon="20.000400"><ele>803.0</ele></trkpt>
+<trkpt lat="49.500800" lon="20.000800"><ele>806.0</ele></trkpt>
+<trkpt lat="49.501200" lon="20.001200"><ele>809.0</ele></trkpt>
+<trkpt lat="49.501600" lon="20.001600"><ele>812.0</ele></trkpt>
+<trkpt lat="49.502000" lon="20.002000"><ele>815.0</ele></trkpt>
+<trkpt lat="49.502400" lon="20.002400"><ele>818.0</ele></trkpt>
+<trkpt lat="49.502800" lon="20.002800"><ele>821.0</ele></trkpt>
+<trkpt lat="49.503200" lon="20.003200"><ele>824.0</ele></trkpt>
+<trkpt lat="49.503600" lon="20.003600"><ele>827.0</ele></trkpt>
+</trkseg></trk>
+<trk><name>Drugi</name><trkseg>
+<trkpt lat="49.600000" lon="20.200000"><ele>800.0</ele></trkpt>
+<trkpt lat="49.600400" lon="20.200400"><ele>803.0</ele></trkpt>
+<trkpt lat="49.600800" lon="20.200800"><ele>806.0</ele></trkpt>
+<trkpt lat="49.601200" lon="20.201200"><ele>809.0</ele></trkpt>
+<trkpt lat="49.601600" lon="20.201600"><ele>812.0</ele></trkpt>
+<trkpt lat="49.602000" lon="20.202000"><ele>815.0</ele></trkpt>
+<trkpt lat="49.602400" lon="20.202400"><ele>818.0</ele></trkpt>
+<trkpt lat="49.602800" lon="20.202800"><ele>821.0</ele></trkpt>
+<trkpt lat="49.603200" lon="20.203200"><ele>824.0</ele></trkpt>
+<trkpt lat="49.603600" lon="20.203600"><ele>827.0</ele></trkpt>
+<trkpt lat="49.604000" lon="20.204000"><ele>830.0</ele></trkpt>
+<trkpt lat="49.604400" lon="20.204400"><ele>833.0</ele></trkpt>
+<trkpt lat="49.604800" lon="20.204800"><ele>836.0</ele></trkpt>
+<trkpt lat="49.605200" lon="20.205200"><ele>839.0</ele></trkpt>
+<trkpt lat="49.605600" lon="20.205600"><ele>842.0</ele></trkpt>
+<trkpt lat="49.606000" lon="20.206000"><ele>845.0</ele></trkpt>
+<trkpt lat="49.606400" lon="20.206400"><ele>848.0</ele></trkpt>
+<trkpt lat="49.606800" lon="20.206800"><ele>851.0</ele></trkpt>
+<trkpt lat="49.607200" lon="20.207200"><ele>854.0</ele></trkpt>
+<trkpt lat="49.607600" lon="20.207600"><ele>857.0</ele></trkpt>
+</trkseg></trk>
+</gpx>

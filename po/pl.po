@@ -1,0 +1,1484 @@
+# Polish translation of gpxfilm.
+# This file is distributed under the same license as the gpxfilm package (GPL-3.0-or-later).
+msgid ""
+msgstr ""
+"Project-Id-Version: gpxfilm\n"
+"Language: pl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: gpxfilm/text.py
+msgid "distance"
+msgstr "dystans"
+
+msgid "ascent"
+msgstr "suma podejść"
+
+msgid "elapsed"
+msgstr "na trasie"
+
+#. a stop on the route, drawn as "stop 7 min"
+msgid "stop"
+msgstr "postój"
+
+msgid "time"
+msgstr "godzina"
+
+msgid "elevation"
+msgstr "wysokość"
+
+msgid "speed"
+msgstr "prędkość"
+
+msgid "heart rate"
+msgstr "tętno"
+
+#: gpxfilm/text.py gpxfilm/webgui.py
+msgid "slope"
+msgstr "nachylenie"
+
+msgid "moving"
+msgstr "w ruchu"
+
+msgid "highest point"
+msgstr "najwyższy punkt"
+
+msgid "Start"
+msgstr "Start"
+
+msgid "Finish"
+msgstr "Meta"
+
+msgid "Start and finish"
+msgstr "Start i meta"
+
+msgid "Terrain: Mapterhorn. Map: © OpenStreetMap"
+msgstr "Teren: Mapterhorn. Mapa: © OpenStreetMap"
+
+#: gpxfilm/compose.py
+msgid "Names: © OpenStreetMap"
+msgstr "Nazwy: © OpenStreetMap"
+
+msgctxt "date"
+msgid "January"
+msgstr "stycznia"
+
+msgctxt "date"
+msgid "February"
+msgstr "lutego"
+
+msgctxt "date"
+msgid "March"
+msgstr "marca"
+
+msgctxt "date"
+msgid "April"
+msgstr "kwietnia"
+
+msgctxt "date"
+msgid "May"
+msgstr "maja"
+
+msgctxt "date"
+msgid "June"
+msgstr "czerwca"
+
+msgctxt "date"
+msgid "July"
+msgstr "lipca"
+
+msgctxt "date"
+msgid "August"
+msgstr "sierpnia"
+
+msgctxt "date"
+msgid "September"
+msgstr "września"
+
+msgctxt "date"
+msgid "October"
+msgstr "października"
+
+msgctxt "date"
+msgid "November"
+msgstr "listopada"
+
+msgctxt "date"
+msgid "December"
+msgstr "grudnia"
+
+msgctxt "decimal separator"
+msgid "."
+msgstr ","
+
+#: gpxfilm/cli.py
+msgctxt "placeholder"
+msgid "FILE"
+msgstr "PLIK"
+
+#: gpxfilm/cli.py
+msgctxt "placeholder"
+msgid "DIR"
+msgstr "KATALOG"
+
+#: gpxfilm/cli.py
+msgctxt "placeholder"
+msgid "TEXT"
+msgstr "TEKST"
+
+#: gpxfilm/cli.py
+msgctxt "placeholder"
+msgid "NAME"
+msgstr "NAZWA"
+
+#: gpxfilm/cli.py
+msgctxt "placeholder"
+msgid "OLD=NEW"
+msgstr "STARA=NOWA"
+
+#: gpxfilm/cli.py
+msgctxt "placeholder"
+msgid "MAP"
+msgstr "RODZAJ"
+
+#: gpxfilm/cli.py
+msgctxt "placeholder"
+msgid "COLOR"
+msgstr "KOLOR"
+
+#: gpxfilm/cli.py
+msgctxt "placeholder"
+msgid "ZONE"
+msgstr "STREFA"
+
+#: gpxfilm/cli.py
+msgctxt "placeholder"
+msgid "CODES"
+msgstr "KODY"
+
+#: gpxfilm/cli.py
+msgctxt "placeholder"
+msgid "WxH"
+msgstr "SZERxWYS"
+
+#: gpxfilm/cli.py
+msgctxt "placeholder"
+msgid "S"
+msgstr "SEK"
+
+#: gpxfilm/cli.py
+msgctxt "placeholder of a number"
+msgid "N"
+msgstr "NR"
+
+#: gpxfilm/cli.py
+msgctxt "placeholder of a count"
+msgid "N"
+msgstr "LICZBA"
+
+#: gpxfilm/cli.py
+msgid "A film of a GPX route on a shaded terrain map."
+msgstr "Film z trasy GPX na cieniowanej mapie terenu."
+
+#: gpxfilm/cli.py
+msgid "GPX file with the track"
+msgstr "plik GPX ze śladem"
+
+#: gpxfilm/cli.py
+msgid "open the settings window in the browser (preview and render the film without typing options)"
+msgstr "otwórz okno ustawień w przeglądarce (podgląd i generowanie filmu bez wpisywania opcji)"
+
+#: gpxfilm/cli.py
+msgid "check which sources of aerial photos (--map aerial) answer right now, and exit"
+msgstr "sprawdź, które źródła zdjęć lotniczych (--map aerial) teraz odpowiadają, i zakończ"
+
+#: gpxfilm/cli.py
+msgid "port of the settings window (default: any free one)"
+msgstr "port okna ustawień (domyślnie dowolny wolny)"
+
+#: gpxfilm/cli.py
+msgid "output MP4 file (default: the name of the GPX file with the .mp4 extension)"
+msgstr "plik wynikowy MP4 (domyślnie: nazwa pliku GPX z rozszerzeniem .mp4)"
+
+#: gpxfilm/cli.py
+msgid "title; separate its lines with \"\\n\" (default: the track name from the file)"
+msgstr "tytuł; kolejne wiersze oddziel przez \"\\n\" (domyślnie: nazwa śladu z pliku)"
+
+#: gpxfilm/cli.py
+msgid "line under the title (default: the date of the track)"
+msgstr "wiersz pod tytułem (domyślnie: data ze śladu)"
+
+#: gpxfilm/cli.py
+msgid "16:9 frame size, e.g. 3840x2160 or 1920x1080"
+msgstr "rozmiar kadru 16:9, np. 3840x2160 albo 1920x1080"
+
+#: gpxfilm/cli.py
+msgid "frames per second"
+msgstr "liczba klatek na sekundę"
+
+#: gpxfilm/cli.py
+msgid "seconds the route takes to draw"
+msgstr "ile sekund trwa rysowanie trasy"
+
+#: gpxfilm/cli.py
+msgid "route color, e.g. #E5202E"
+msgstr "kolor trasy, np. #E5202E"
+
+#: gpxfilm/cli.py
+msgid "maximum number of labeled places along the route"
+msgstr "największa liczba podpisanych miejsc przy trasie"
+
+#: gpxfilm/cli.py
+msgid "maximum number of labeled peaks off the route"
+msgstr "największa liczba podpisanych szczytów poza trasą"
+
+#: gpxfilm/cli.py
+msgid "how many of the highest peaks the intro shows, over the region and after the camera arrives (0 = none)"
+msgstr "ile najwyższych szczytów pokazać w intrze, nad okolicą i po dojeździe kamery (0 = wcale)"
+
+#: gpxfilm/cli.py
+msgid "how many of the main places (cities, towns, villages) of the region the intro shows (0 = none)"
+msgstr "ile najważniejszych miejscowości okolicy (miast, miasteczek, wsi) pokazać w intrze (0 = wcale)"
+
+#: gpxfilm/cli.py
+msgid "radius around the start within which the intro looks for the highest peaks and the main places"
+msgstr "promień od startu, w którym intro szuka najwyższych szczytów i najważniejszych miejscowości"
+
+#: gpxfilm/cli.py
+msgid "seconds the labels of the places and peaks of the intro stay fully visible, from the last one coming in until they start to fade, both during the pause over the region and after the camera arrives (0.5 to 20; without it about 1.3 s over the region and 0.8 s after the camera arrives)"
+msgstr "ile sekund podpisy miejscowości i szczytów w intrze są w pełni widoczne, od pojawienia się ostatniego do początku gaśnięcia, przy postoju nad okolicą i po dojeździe (od 0.5 do 20; bez opcji ok. 1.3 s nad okolicą i 0.8 s po dojeździe)"
+
+#: gpxfilm/cli.py
+msgid "language of the texts on the film"
+msgstr "język napisów"
+
+#: gpxfilm/cli.py
+msgid "labels on the map: plain, strong (thick dark outline) or badges (dark background behind the text)"
+msgstr "podpisy na mapie: plain (zwykłe), strong (gruby ciemny obrys) albo badges (ciemne tło pod napisem)"
+
+#: gpxfilm/cli.py
+msgid "scale of the labels on the map, from 0.7 to 2.0, e.g. 1.25"
+msgstr "powiększenie podpisów na mapie, od 0.7 do 2.0, np. 1.25"
+
+#: gpxfilm/cli.py
+msgid "preferred language of the names from OpenStreetMap, e.g. it or de,it"
+msgstr "preferowany język nazw z OpenStreetMap, np. it albo de,it"
+
+#: gpxfilm/cli.py
+msgid "rename a place on the film (can be given more than once)"
+msgstr "zmień nazwę miejsca na filmie (można podać wiele razy)"
+
+#: gpxfilm/cli.py
+msgid "do not label places whose name contains this text (can be given more than once)"
+msgstr "nie podpisuj miejsc, których nazwa zawiera ten tekst (można podać wiele razy)"
+
+#: gpxfilm/cli.py
+msgid "time zone of the clock times on the film, e.g. Europe/Rome (default: the system time zone)"
+msgstr "strefa czasowa godzin na filmie, np. Europe/Rome (domyślnie: systemowa)"
+
+#: gpxfilm/cli.py
+msgid "start with a view of the whole country and fly the camera to the region of the route"
+msgstr "zacznij od widoku całego kraju i dojedź kamerą do okolicy trasy"
+
+#: gpxfilm/cli.py
+msgid "seconds the camera flight takes"
+msgstr "ile sekund trwa dojazd kamery"
+
+#: gpxfilm/cli.py
+msgid "folder with photos: each one appears at the place where it was taken (by the time stored in the file)"
+msgstr "katalog ze zdjęciami: każde pokaże się w miejscu, w którym zostało zrobione (według godziny zapisanej w pliku)"
+
+#: gpxfilm/cli.py
+msgid "seconds each photo is shown"
+msgstr "ile sekund widać każde zdjęcie"
+
+#: gpxfilm/cli.py
+msgid "correction of the camera clock in seconds (positive when the camera was behind)"
+msgstr "poprawka zegara aparatu w sekundach (dodatnia, gdy aparat się spóźniał)"
+
+#: gpxfilm/cli.py
+msgid "maximum number of photos on the film (0 = all)"
+msgstr "największa liczba zdjęć na filmie (0 = wszystkie)"
+
+#: gpxfilm/cli.py
+msgid "pause at stops of at least this many minutes (0 = off)"
+msgstr "zatrzymaj się na postojach trwających co najmniej tyle minut (0 = wyłącz)"
+
+#: gpxfilm/cli.py
+msgid "your own labels, one per line: \"46.6187, 12.3085 Name\", \"3.2 km Name\" or \"12:39 Name\""
+msgstr "własne podpisy, po jednym w wierszu: \"46.6187, 12.3085 Nazwa\", \"3,2 km Nazwa\" albo \"12:39 Nazwa\""
+
+#: gpxfilm/cli.py
+msgid "kilometer markers along the route"
+msgstr "znaczniki kolejnych kilometrów na trasie"
+
+#: gpxfilm/cli.py
+msgid "distance from your watch in km: the film ends on this value (rounded to 0.1 km, like every distance on the film), and the counters and kilometer markers follow it (without this option the distance worked out from the track usually differs from the watch by about ±2%%)"
+msgstr "dystans z zegarka w km: film skończy się na tej wartości (zaokrąglonej do 0,1 km, jak każdy dystans na filmie), a liczniki i znaczniki kilometrów dopasują się do niej (bez tej opcji dystans liczony ze śladu różni się zwykle od zegarka o ok. ±2%%)"
+
+#: gpxfilm/cli.py
+msgid "total ascent from your watch in m: the film ends on this value"
+msgstr "suma podejść z zegarka w m: film skończy się na tej wartości"
+
+#: gpxfilm/cli.py
+msgid "extra live counters: time of day, elevation, speed and heart rate"
+msgstr "dodatkowe liczniki na żywo: godzina, wysokość, prędkość i tętno"
+
+#: gpxfilm/cli.py
+msgid "leave out the heart rate, even if the file has it"
+msgstr "pomiń tętno, nawet jeśli jest w pliku"
+
+#: gpxfilm/cli.py
+msgid "color the route by data from the track"
+msgstr "kolor trasy zależny od danych ze śladu"
+
+#: gpxfilm/cli.py
+msgid "your own typeface for the title and the numbers"
+msgstr "własny krój pisma tytułu i liczb"
+
+#: gpxfilm/cli.py
+msgid "logo in the top right corner of the frame"
+msgstr "znak w prawym górnym rogu kadru"
+
+#: gpxfilm/cli.py
+msgid "end with a summary card"
+msgstr "zakończ planszą z podsumowaniem"
+
+#: gpxfilm/cli.py
+msgid "seconds the summary card lasts"
+msgstr "ile sekund trwa plansza końcowa"
+
+#: gpxfilm/cli.py
+msgid "background music (looped and faded out at the end)"
+msgstr "podkład dźwiękowy (zapętlany i wyciszany na końcu)"
+
+#: gpxfilm/cli.py
+msgid "quick draft: 1280x720 at 30 fps"
+msgstr "szybka wersja próbna: 1280x720 i 30 kl./s"
+
+#: gpxfilm/cli.py
+msgid "save images for slides: the map alone, a frame at each labeled place and the final frame"
+msgstr "zapisz obrazy na slajdy: samą mapę, kadr przy każdym podpisanym miejscu i kadr końcowy"
+
+#: gpxfilm/cli.py
+msgid "map background: terrain (the default, shaded relief), topo (OpenTopoMap), aerial (official aerial photos of the route's country, very sharp), satellite (Sentinel-2, whole world, 10 m) or your own tile address with {z}/{x}/{y} or a WMS address with {bbox}"
+msgstr "podkład: terrain (domyślny, cieniowana rzeźba), topo (OpenTopoMap), aerial (urzędowe zdjęcia lotnicze kraju trasy, bardzo ostre), satellite (Sentinel-2, cały świat, 10 m) albo własny adres kafli z {z}/{x}/{y} lub adres WMS z {bbox}"
+
+#: gpxfilm/cli.py
+msgid "color style of the map"
+msgstr "styl barw mapy"
+
+#: gpxfilm/cli.py
+msgid "light the map from the direction of the sun halfway along the route"
+msgstr "oświetl mapę z kierunku, z którego świeciło słońce w połowie trasy"
+
+#: gpxfilm/cli.py
+msgid "small outline of the country with a marker of the place in a corner of the map"
+msgstr "mały zarys kraju ze znacznikiem miejsca w rogu mapy"
+
+#: gpxfilm/cli.py
+msgid "label lakes and towns in the background of the map"
+msgstr "podpisz na mapie jeziora i miejscowości w tle"
+
+#: gpxfilm/cli.py
+msgid "when no title is given, take the name of the town and region from the map"
+msgstr "gdy nie podano tytułu, weź nazwę miejscowości i regionu z mapy"
+
+#: gpxfilm/cli.py
+msgid "save a description of the film: labeled places, matched photos, expected length"
+msgstr "zapisz opis filmu: podpisane miejsca, dopasowane zdjęcia, przewidywaną długość"
+
+#: gpxfilm/cli.py
+msgid "also save the last frame as PNG"
+msgstr "zapisz dodatkowo ostatnią klatkę jako PNG"
+
+#: gpxfilm/cli.py
+msgid "save only the last frame, no film"
+msgstr "zapisz tylko ostatnią klatkę, bez filmu"
+
+#: gpxfilm/cli.py
+msgid "do not download OpenStreetMap data"
+msgstr "nie pobieraj danych OpenStreetMap"
+
+#: gpxfilm/cli.py
+msgid "draw only the track or route with this number when the file has several (the number from the list the program prints)"
+msgstr "narysuj tylko ślad albo trasę o tym numerze, gdy w pliku jest ich kilka (numer z listy, którą program wypisuje)"
+
+#: gpxfilm/cli.py
+msgid "use the times from the GPX file even if they look fake (e.g. a planned route with times from 1970 or a ride faster than 400 km/h)"
+msgstr "użyj godzin z pliku GPX, nawet jeśli wyglądają na udawane (np. trasa zaplanowana z godzinami od 1970 roku albo przejazd szybszy niż 400 km/h)"
+
+#: gpxfilm/cli.py
+msgid "encoding quality (lower = better, larger file)"
+msgstr "jakość kodowania (mniej = lepiej, większy plik)"
+
+#: gpxfilm/cli.py
+msgid "force an ffmpeg encoder, e.g. libx264"
+msgstr "wymuś koder ffmpeg, np. libx264"
+
+#: gpxfilm/cli.py
+msgid "The settings file {file} uses old names. They work, but replace them with the new ones:\n{changes}\nThis notice appears again only after the file changes."
+msgstr "Plik ustawień {file} używa starych nazw. Działają, ale zamień je na nowe:\n{changes}\nTa informacja pojawi się znowu dopiero po zmianie pliku."
+
+#: gpxfilm/cli.py
+msgid "Unknown settings in {file}: {names}"
+msgstr "Nieznane ustawienia w {file}: {names}"
+
+#: gpxfilm/cli.py
+msgid "The settings file needs Python 3.11 or newer – skipping it."
+msgstr "Plik ustawień wymaga Pythona 3.11 lub nowszego – pomijam go."
+
+#: gpxfilm/cli.py
+msgid "--distance must be a number greater than zero (in km, at most 100000)"
+msgstr "--distance musi być liczbą większą od zera (w km, najwyżej 100000)"
+
+#: gpxfilm/cli.py
+msgid "--ascent must be a non-negative number (in m, at most 1000000)"
+msgstr "--ascent musi być liczbą nieujemną (w m, najwyżej 1000000)"
+
+#: gpxfilm/cli.py
+msgid "--intro-peaks must be a non-negative number"
+msgstr "--intro-peaks musi być liczbą nieujemną"
+
+#: gpxfilm/cli.py
+msgid "--intro-places must be a non-negative number"
+msgstr "--intro-places musi być liczbą nieujemną"
+
+#: gpxfilm/cli.py
+msgid "--intro-radius must be a number greater than zero (in km, at most 100)"
+msgstr "--intro-radius musi być liczbą większą od zera (w km, najwyżej 100)"
+
+#: gpxfilm/cli.py
+msgid "--intro-label-duration must be a number from 0.5 to 20 (in seconds)"
+msgstr "--intro-label-duration musi być liczbą od 0.5 do 20 (w sekundach)"
+
+#: gpxfilm/cli.py
+msgid "--label-size must be a number from 0.7 to 2.0"
+msgstr "--label-size musi być liczbą od 0.7 do 2.0"
+
+#: gpxfilm/cli.py
+msgid "give a GPX file or run with the --gui option"
+msgstr "podaj plik GPX albo uruchom z opcją --gui"
+
+#: gpxfilm/cli.py
+msgid "The frame must have a 16:9 aspect ratio."
+msgstr "Kadr musi mieć proporcje 16:9."
+
+#: gpxfilm/cli.py
+msgid "Unknown map background. Choose terrain, topo, aerial, satellite or a tile address with {z}, {x} and {y}."
+msgstr "Nieznany podkład. Do wyboru: terrain, topo, aerial, satellite albo adres kafli zawierający {z}, {x} i {y}."
+
+#: gpxfilm/cli.py
+msgid "label line not understood: {line}"
+msgstr "nie rozumiem wiersza podpisów: {line}"
+
+#: gpxfilm/cli.py
+msgid "No open aerial photos are known for this country ({country}) – using Sentinel-2 satellite imagery."
+msgstr "Nie znam otwartej ortofotomapy dla tego kraju ({country}) – biorę zdjęcia satelitarne Sentinel-2."
+
+#: gpxfilm/cli.py
+msgid "it could not be determined"
+msgstr "nie udało się go ustalić"
+
+#: gpxfilm/cli.py
+msgid "Map: user-supplied background. Terrain: Mapterhorn"
+msgstr "Mapa: podkład użytkownika. Teren: Mapterhorn"
+
+#: gpxfilm/cli.py
+msgid "Sun halfway along the route: azimuth {azimuth}°, altitude {altitude}°"
+msgstr "Słońce w połowie trasy: azymut {azimuth}°, wysokość {altitude}°"
+
+#: gpxfilm/cli.py
+msgid "Could not get the place name: {error}"
+msgstr "Nie udało się pobrać nazwy miejsca: {error}"
+
+#: gpxfilm/cli.py
+msgid "Drawing the background…"
+msgstr "Rysuję tło…"
+
+#: gpxfilm/cli.py
+msgid "Saved images for slides: {folder} ({n} file)"
+msgid_plural "Saved images for slides: {folder} ({n} files)"
+msgstr[0] "Zapisano kadry na slajdy: {folder} ({n} plik)"
+msgstr[1] "Zapisano kadry na slajdy: {folder} ({n} pliki)"
+msgstr[2] "Zapisano kadry na slajdy: {folder} ({n} plików)"
+
+#: gpxfilm/cli.py
+msgid "Intro: could not plan the camera flight ({error}) – the film length in the report is approximate."
+msgstr "Intro: nie udało się zaplanować przelotu ({error}) – czas filmu w raporcie jest przybliżony."
+
+#: gpxfilm/cli.py
+msgid "Saved the frame: {file}"
+msgstr "Zapisano kadr: {file}"
+
+#: gpxfilm/cli.py
+msgctxt "slide file name"
+msgid "map"
+msgstr "mapa"
+
+#: gpxfilm/cli.py
+msgctxt "slide file name"
+msgid "finish"
+msgstr "meta"
+
+#: gpxfilm/compose.py
+msgid "No data to color the route by ({mode}) – keeping one color."
+msgstr "Brak danych do kolorowania trasy ({mode}) – zostaje jeden kolor."
+
+#: gpxfilm/compose.py
+msgid "Could not prepare the minimap: {error}"
+msgstr "Nie udało się przygotować minimapy: {error}"
+
+#: gpxfilm/compose.py
+msgid "skipping {name}: neither the time nor the position of the photo matches the route"
+msgstr "pomijam {name}: godzina ani pozycja zdjęcia nie pasują do trasy"
+
+#: gpxfilm/compose.py
+msgid "Photos on the route: {n} of {total}"
+msgstr "Zdjęcia na trasie: {n} z {total}"
+
+#: gpxfilm/terrain.py
+msgid "Could not download the terrain model for the elevation profile – keeping the elevation from the file."
+msgstr "Nie udało się pobrać modelu terenu do profilu wysokości – zostaje wysokość z pliku."
+
+#: gpxfilm/terrain.py
+msgid "Could not download the terrain model for the elevation profile – using the elevation from the frame's map."
+msgstr "Nie udało się pobrać modelu terenu do profilu wysokości – wysokość z mapy kadru."
+
+#: gpxfilm/terrain.py
+msgid "The elevation in the file is very noisy (total ascent {ascent} m, {model} m by the terrain model) – taking it from the terrain model."
+msgstr "Wysokość z pliku mocno szumi (suma podejść {ascent} m, według modelu terenu {model} m) – biorę ją z modelu terenu."
+
+#: gpxfilm/terrain.py
+msgid "Terrain model: {n} tile, zoom {zoom}"
+msgid_plural "Terrain model: {n} tiles, zoom {zoom}"
+msgstr[0] "Model terenu: {n} kafel, poziom {zoom}"
+msgstr[1] "Model terenu: {n} kafle, poziom {zoom}"
+msgstr[2] "Model terenu: {n} kafli, poziom {zoom}"
+
+#: gpxfilm/terrain.py
+msgid "Aerial photos do not cover this place – using Sentinel-2 satellite imagery."
+msgstr "Zdjęcia lotnicze nie obejmują tego miejsca – biorę satelitarne Sentinel-2."
+
+#: gpxfilm/terrain.py
+msgid "Aerial photos: {error} – using Sentinel-2 satellite imagery for the whole frame."
+msgstr "Zdjęcia lotnicze: {error} – biorę dla całego kadru zdjęcia satelitarne Sentinel-2."
+
+#: gpxfilm/terrain.py
+msgid "Map background: {error}."
+msgstr "Podkład mapy: {error}."
+
+#: gpxfilm/terrain.py
+msgid "Could not download the map background – keeping the terrain map."
+msgstr "Podkładu nie udało się pobrać – zostaje mapa terenu."
+
+#: gpxfilm/film.py
+msgid "level {level}/{total}"
+msgstr "poziom {level}/{total}"
+
+#: gpxfilm/film.py
+msgid "level {level}/{total}: country view ({country})"
+msgstr "poziom {level}/{total}: widok kraju ({country})"
+
+#: gpxfilm/film.py
+msgid "level {level}/{total}: country view"
+msgstr "poziom {level}/{total}: widok kraju"
+
+#: gpxfilm/film.py
+msgid "Place in the intro: the most important one within {radius} km of the start"
+msgid_plural "Places in the intro: the {n} most important within {radius} km of the start"
+msgstr[0] "Miejscowość w intrze: najważniejsza w promieniu {radius} km od startu"
+msgstr[1] "Miejscowości w intrze: {n} najważniejsze w promieniu {radius} km od startu"
+msgstr[2] "Miejscowości w intrze: {n} najważniejszych w promieniu {radius} km od startu"
+
+#: gpxfilm/film.py
+msgid "Peak in the intro: the highest one within {radius} km of the start"
+msgid_plural "Peaks in the intro: the {n} highest within {radius} km of the start"
+msgstr[0] "Szczyt w intrze: najwyższy w promieniu {radius} km od startu"
+msgstr[1] "Szczyty w intrze: {n} najwyższe w promieniu {radius} km od startu"
+msgstr[2] "Szczyty w intrze: {n} najwyższych w promieniu {radius} km od startu"
+
+#: gpxfilm/film.py
+msgid "Warning: ffmpeg has no libx264, encoding with {encoder}."
+msgstr "Uwaga: ffmpeg nie ma libx264, koduję przez {encoder}."
+
+#: gpxfilm/film.py
+msgid "ffmpeg has none of the encoders: libx264, h264_videotoolbox, libopenh264, libx265, libsvtav1."
+msgstr "ffmpeg nie ma żadnego z koderów: libx264, h264_videotoolbox, libopenh264, libx265, libsvtav1."
+
+#: gpxfilm/film.py
+msgid "ffmpeg was not found (Fedora: sudo dnf install ffmpeg, macOS: brew install ffmpeg)."
+msgstr "Nie znaleziono programu ffmpeg (Fedora: sudo dnf install ffmpeg, macOS: brew install ffmpeg)."
+
+#: gpxfilm/film.py
+msgid "The route takes up too much of its country – skipping the camera flight."
+msgstr "Trasa zajmuje zbyt dużą część kraju – pomijam dojazd kamery."
+
+#: gpxfilm/film.py
+msgid "Preparing the camera flight from the country view…"
+msgstr "Przygotowuję dojazd kamery od widoku kraju…"
+
+#: gpxfilm/film.py
+msgid "Encoding {n} frame {size} at {fps} fps → {file}"
+msgid_plural "Encoding {n} frames {size} at {fps} fps → {file}"
+msgstr[0] "Koduję {n} klatkę {size} przy {fps} kl./s → {file}"
+msgstr[1] "Koduję {n} klatki {size} przy {fps} kl./s → {file}"
+msgstr[2] "Koduję {n} klatek {size} przy {fps} kl./s → {file}"
+
+#: gpxfilm/film.py
+msgid "Saving the selected frames of {n} in {folder}"
+msgstr "Zapisuję wybrane klatki z {n} w {folder}"
+
+#: gpxfilm/film.py
+msgid "could not open {file}: {error}"
+msgstr "nie udało się otworzyć {file}: {error}"
+
+#: gpxfilm/film.py
+msgid "ffmpeg stopped encoding – see the message above."
+msgstr "ffmpeg przerwał kodowanie – sprawdź komunikat powyżej."
+
+#: gpxfilm/film.py
+msgid "Done: frames in {folder} ({seconds} s)"
+msgstr "Gotowe: klatki w {folder} ({seconds} s)"
+
+#: gpxfilm/film.py
+msgid "ffmpeg ended with an error."
+msgstr "ffmpeg zakończył się błędem."
+
+#: gpxfilm/film.py
+msgid "Done: {file} ({size} MB, {seconds} s)"
+msgstr "Gotowe: {file} ({size} MB, {seconds} s)"
+
+#: gpxfilm/geo.py
+msgid "Cannot read the file {path}: {error}."
+msgstr "Nie mogę odczytać pliku {path}: {error}."
+
+#: gpxfilm/geo.py
+msgid "The file {file} is a damaged gzip archive."
+msgstr "Plik {file} jest uszkodzonym archiwum gzip."
+
+#: gpxfilm/geo.py
+msgid "The file {file} is a ZIP archive (for example an export from Garmin Connect or a KMZ file). Unpack it and choose the .gpx file."
+msgstr "Plik {file} to archiwum ZIP (np. eksport z Garmin Connect albo plik KMZ). Rozpakuj je i wybierz plik .gpx."
+
+#: gpxfilm/geo.py
+msgid "The file {file} is a FIT file straight from a watch or bike computer. The program reads only GPX: export the activity as GPX (Garmin Connect, Strava and watch apps have this option)."
+msgstr "Plik {file} to plik FIT prosto z zegarka lub licznika. Program czyta tylko GPX: wyeksportuj aktywność jako GPX (Garmin Connect, Strava i aplikacje zegarków mają taką opcję)."
+
+#: gpxfilm/geo.py
+msgid "The file {file} is empty."
+msgstr "Plik {file} jest pusty."
+
+#: gpxfilm/geo.py
+msgid "The file {file} is not a valid GPX file: the XML is damaged or incomplete ({error})."
+msgstr "Plik {file} nie jest poprawnym plikiem GPX: XML jest uszkodzony albo niepełny ({error})."
+
+#: gpxfilm/geo.py
+msgid "The file {file} uses a character encoding the program cannot read ({encoding})."
+msgstr "Plik {file} ma kodowanie znaków, którego nie umiem odczytać ({encoding})."
+
+#: gpxfilm/geo.py
+msgid "The file {file} is not a valid GPX file: the XML is damaged or incomplete (it ends in the middle of a character)."
+msgstr "Plik {file} nie jest poprawnym plikiem GPX: XML jest uszkodzony albo niepełny (urywa się w połowie znaku)."
+
+#: gpxfilm/geo.py
+msgid "The file {file} is not a valid GPX file: its characters do not match the encoding {encoding}."
+msgstr "Plik {file} nie jest poprawnym plikiem GPX: jego znaki nie pasują do kodowania {encoding}."
+
+#: gpxfilm/geo.py
+msgid "The file {file} is a TCX file, not GPX. Export the activity as GPX (Garmin Connect, Polar Flow and COROS offer it next to TCX)."
+msgstr "Plik {file} to plik TCX, a nie GPX. Wyeksportuj aktywność jako GPX (Garmin Connect, Polar Flow i COROS mają taką opcję obok TCX)."
+
+#: gpxfilm/geo.py
+msgid "The file {file} is a KML file (for example from Google Earth), not GPX. Save or convert the route as GPX."
+msgstr "Plik {file} to plik KML (np. z Google Earth), a nie GPX. Zapisz albo przekonwertuj trasę do GPX."
+
+#: gpxfilm/geo.py
+msgid "The file {file} is not a GPX file (its root XML element is <{element}>)."
+msgstr "Plik {file} nie jest plikiem GPX (główny element XML to <{element}>)."
+
+#: gpxfilm/geo.py
+msgid "start in {year}"
+msgstr "start w {year} roku"
+
+#: gpxfilm/geo.py
+msgid "a gap of {days} days between points"
+msgstr "przerwa {days} dni między punktami"
+
+#: gpxfilm/geo.py
+msgid "{speed} km/h on average between points"
+msgstr "między punktami średnio {speed} km/h"
+
+#: gpxfilm/geo.py
+msgctxt "thousands separator"
+msgid ","
+msgstr " "
+
+#: gpxfilm/geo.py
+msgid "Only {share}% of the points have a time – drawing the track without times."
+msgstr "Godzinę ma tylko {share}% punktów – rysuję ślad bez godzin."
+
+#: gpxfilm/geo.py
+msgid "The times in the file look made up ({reason}) – drawing the track as a route without times. If they are real, use --keep-times."
+msgstr "Godziny w pliku wyglądają na udawane ({reason}) – rysuję ślad jak trasę bez godzin. Jeśli są prawdziwe, użyj opcji --keep-times."
+
+#: gpxfilm/geo.py
+msgid "Skipped points without a time or with a wrong time: {count}."
+msgstr "Pominięte punkty bez godziny albo z błędną godziną: {count}."
+
+#: gpxfilm/geo.py
+msgid "{height} m everywhere"
+msgstr "wszędzie {height} m"
+
+#: gpxfilm/geo.py
+msgid "only {share}% of the points have an elevation"
+msgstr "tylko {share}% punktów ma wysokość"
+
+#: gpxfilm/geo.py
+msgid "a gap in the elevation over {length} m of the track"
+msgstr "luka w wysokości na {length} m śladu"
+
+#: gpxfilm/geo.py
+msgid "there is {n} track"
+msgid_plural "there are {n} tracks"
+msgstr[0] "jest {n} ślad"
+msgstr[1] "są {n} ślady"
+msgstr[2] "jest {n} śladów"
+
+#: gpxfilm/geo.py
+msgid "there is {n} route"
+msgid_plural "there are {n} routes"
+msgstr[0] "jest {n} trasa"
+msgstr[1] "są {n} trasy"
+msgstr[2] "jest {n} tras"
+
+#: gpxfilm/geo.py
+msgid "{year}-{month}-{day}"
+msgstr "{day}.{month}.{year}"
+
+#: gpxfilm/geo.py
+msgid "unnamed"
+msgstr "bez nazwy"
+
+#: gpxfilm/geo.py
+msgid "In the file {count}:"
+msgstr "W pliku {count}:"
+
+#: gpxfilm/geo.py
+msgid "track {number}"
+msgstr "ślad {number}"
+
+#: gpxfilm/geo.py
+msgid "route {number}"
+msgstr "trasa {number}"
+
+#: gpxfilm/geo.py
+msgid "tracks {first}–{last}"
+msgstr "ślady {first}–{last}"
+
+#: gpxfilm/geo.py
+msgid "routes {first}–{last}"
+msgstr "trasy {first}–{last}"
+
+#: gpxfilm/geo.py
+msgid "There is no number {number}: {count} in the file."
+msgstr "Nie ma numeru {number}: w pliku {count}."
+
+#: gpxfilm/geo.py
+msgid "Drawing track {number}."
+msgstr "Rysuję ślad {number}."
+
+#: gpxfilm/geo.py
+msgid "Drawing route {number}."
+msgstr "Rysuję trasę {number}."
+
+#: gpxfilm/geo.py
+msgid "Each track starts where the previous one ends – joining them into one. Choose one of them with --track N."
+msgstr "Kolejne zaczynają się tam, gdzie kończą się poprzednie – łączę je w jeden przebieg. Jeden z nich wybierzesz opcją --track NR."
+
+#: gpxfilm/geo.py
+msgid "Each route starts where the previous one ends – joining them into one. Choose one of them with --track N."
+msgstr "Kolejne zaczynają się tam, gdzie kończą się poprzednie – łączę je w jeden przebieg. Jedną z nich wybierzesz opcją --track NR."
+
+#: gpxfilm/geo.py
+msgid "They do not touch – drawing the longest stretch: {part}. Choose another number with --track N."
+msgstr "Nie stykają się – rysuję najdłuższy przebieg: {part}. Inny numer wybierzesz opcją --track NR."
+
+#: gpxfilm/geo.py
+msgid "Not all of them touch – drawing the longest stretch: {part}. Choose another number with --track N."
+msgstr "Nie wszystkie się stykają – rysuję najdłuższy przebieg: {part}. Inny numer wybierzesz opcją --track NR."
+
+#: gpxfilm/geo.py
+msgid "Skipped points with wrong or missing coordinates: {count}."
+msgstr "Pominięte punkty z błędnymi albo brakującymi współrzędnymi: {count}."
+
+#: gpxfilm/geo.py
+msgid "Skipped points off the map (beyond {latitude}° north or south): {count}."
+msgstr "Pominięte punkty poza mapą (bliżej bieguna niż {latitude}° szerokości): {count}."
+
+#: gpxfilm/geo.py
+msgid "The track lies beyond {latitude}° north or south – the map does not reach that far."
+msgstr "Ślad leży bliżej bieguna niż {latitude}° szerokości – mapa nie sięga tak daleko."
+
+#: gpxfilm/geo.py
+msgid "No point of the track has valid coordinates – probably a workout without GPS (for example on a treadmill or indoors)."
+msgstr "Żaden punkt śladu nie ma poprawnych współrzędnych – to pewnie trening bez GPS (np. na bieżni albo w hali)."
+
+#: gpxfilm/geo.py
+msgid "The track in the file has no GPS points – probably a workout without GPS (for example on a treadmill or indoors)."
+msgstr "Ślad w pliku nie ma żadnego punktu GPS – to pewnie trening bez GPS (np. na bieżni albo w hali)."
+
+#: gpxfilm/geo.py
+msgid "The file has only single points (wpt), no track or route."
+msgstr "W pliku są tylko pojedyncze punkty (wpt), bez śladu ani trasy."
+
+#: gpxfilm/geo.py
+msgid "The GPX file has no track (trkpt) or route (rtept)."
+msgstr "W pliku GPX nie ma śladu (trkpt) ani trasy (rtept)."
+
+#: gpxfilm/geo.py
+msgid "Skipped position spikes (points far off the track): {count}."
+msgstr "Pominięte odskoki pozycji (punkty daleko od śladu): {count}."
+
+#: gpxfilm/geo.py
+msgid "The file has only one track point – too few to draw a route."
+msgstr "W pliku jest tylko jeden punkt śladu – za mało, żeby narysować trasę."
+
+#: gpxfilm/geo.py
+msgid "All track points lie in one place – there is no route to draw."
+msgstr "Wszystkie punkty śladu leżą w jednym miejscu – nie ma trasy do narysowania."
+
+#: gpxfilm/geo.py
+msgid "The times in the file do not move forward – drawing the track without them."
+msgstr "Godziny w pliku nie idą do przodu – rysuję ślad bez nich."
+
+#: gpxfilm/geo.py
+msgid "There is no movement on the track – the whole recording is one stop, there is no route to draw."
+msgstr "Na śladzie nie ma ruchu – całe nagranie to jeden postój, nie ma trasy do narysowania."
+
+#: gpxfilm/geo.py
+msgid "The elevation in the file is not usable for the profile ({reason}) – taking it from the terrain model for the whole track."
+msgstr "Wysokość z pliku nie nadaje się do profilu ({reason}) – biorę ją dla całego śladu z modelu terenu."
+
+#: gpxfilm/geo.py
+msgid "The heart rate reading covers less than 20% of the route – leaving it out."
+msgstr "Pomiar tętna obejmuje mniej niż 20% trasy – pomijam go."
+
+#: gpxfilm/osm.py
+msgid "OpenStreetMap: downloading data ({server})"
+msgstr "OpenStreetMap: pobieram dane ({server})"
+
+#: gpxfilm/osm.py
+msgid "failed: {error}"
+msgstr "nie udało się: {error}"
+
+#: gpxfilm/osm.py
+msgid "No OpenStreetMap data – the film will have no trails, lakes or place labels."
+msgstr "Brak danych OpenStreetMap – film powstanie bez szlaków, jezior i podpisów miejsc."
+
+#: gpxfilm/osm.py
+msgid "OpenStreetMap: downloading the peaks nearby ({server})"
+msgstr "OpenStreetMap: pobieram szczyty okolicy ({server})"
+
+#: gpxfilm/osm.py
+msgid "OpenStreetMap: downloading the places nearby ({server})"
+msgstr "OpenStreetMap: pobieram miejscowości okolicy ({server})"
+
+#: gpxfilm/sources.py
+msgid "Imagery: Sentinel-2 cloudless, s2maps.eu, EOX (Copernicus Sentinel data 2016–2017)"
+msgstr "Zdjęcia: Sentinel-2 cloudless, s2maps.eu, EOX (dane Copernicus Sentinel 2016–2017)"
+
+#: gpxfilm/sources.py
+msgid "Terrain: Mapterhorn"
+msgstr "Teren: Mapterhorn"
+
+#: gpxfilm/sources.py
+msgid "Map: © OpenStreetMap, SRTM"
+msgstr "Mapa: © OpenStreetMap, SRTM"
+
+#: gpxfilm/sources.py
+msgid "style © OpenTopoMap (CC-BY-SA)"
+msgstr "styl © OpenTopoMap (CC-BY-SA)"
+
+#: gpxfilm/sources.py
+msgid "Imagery: Sentinel-2 cloudless, s2maps.eu, EOX (Copernicus Sentinel data 2016–2017). Terrain: Mapterhorn. Trails: © OpenStreetMap"
+msgstr "Zdjęcia: Sentinel-2 cloudless, s2maps.eu, EOX (dane Copernicus Sentinel 2016–2017). Teren: Mapterhorn. Szlaki: © OpenStreetMap"
+
+#: gpxfilm/sources.py
+msgid "Orthophotomap: Główny Urząd Geodezji i Kartografii, geoportal.gov.pl"
+msgstr "Ortofotomapa: Główny Urząd Geodezji i Kartografii, geoportal.gov.pl"
+
+#: gpxfilm/sources.py
+msgid "working"
+msgstr "działa"
+
+#: gpxfilm/sources.py
+msgid "answers with an empty image"
+msgstr "odpowiada pustym obrazem"
+
+#: gpxfilm/sources.py
+msgid "not working ({error})"
+msgstr "nie działa ({error})"
+
+#: gpxfilm/sources.py
+msgid "OK"
+msgstr "OK"
+
+#: gpxfilm/sources.py
+msgid "FAIL"
+msgstr "BRAK"
+
+#: gpxfilm/sources.py
+msgid "Sources: {total}, working: {working}, not working: {failing}. Where a source does not work, the program takes the next one or satellite imagery."
+msgstr "Źródeł: {total}, działa: {working}, nie działa: {failing}. Tam, gdzie źródło nie działa, program bierze następne albo zdjęcia satelitarne."
+
+#: gpxfilm/tiles.py
+msgid "the server did not return {missing} of {total} tile even after retries ({source})"
+msgid_plural "the server did not return {missing} of {total} tiles even after retries ({source})"
+msgstr[0] "serwer nie oddał {missing} z {total} kafla mimo ponawiania ({source})"
+msgstr[1] "serwer nie oddał {missing} z {total} kafli mimo ponawiania ({source})"
+msgstr[2] "serwer nie oddał {missing} z {total} kafli mimo ponawiania ({source})"
+
+#: gpxfilm/tiles.py
+msgid "the server did not return {missing} of {total} tile even after retries"
+msgid_plural "the server did not return {missing} of {total} tiles even after retries"
+msgstr[0] "serwer nie oddał {missing} z {total} kafla mimo ponawiania"
+msgstr[1] "serwer nie oddał {missing} z {total} kafli mimo ponawiania"
+msgstr[2] "serwer nie oddał {missing} z {total} kafli mimo ponawiania"
+
+#: gpxfilm/tiles.py
+msgid "the server does not answer or returns errors ({source})"
+msgstr "serwer nie odpowiada albo zwraca błędy ({source})"
+
+#: gpxfilm/tiles.py
+msgid "the server does not answer or returns errors"
+msgstr "serwer nie odpowiada albo zwraca błędy"
+
+#: gpxfilm/tiles.py
+msgid "Map background: {n} tile, zoom {zoom}"
+msgid_plural "Map background: {n} tiles, zoom {zoom}"
+msgstr[0] "Podkład mapy: {n} kafel, poziom {zoom}"
+msgstr[1] "Podkład mapy: {n} kafle, poziom {zoom}"
+msgstr[2] "Podkład mapy: {n} kafli, poziom {zoom}"
+
+#: gpxfilm/tiles.py
+msgid "Map background: {error} – using the next source ({source})."
+msgstr "Podkład mapy: {error} – biorę następne źródło ({source})."
+
+#: gpxfilm/tiles.py
+msgid "Map background: {error} – another source fills the gaps."
+msgstr "Podkład mapy: {error} – luki wypełnia inne źródło."
+
+#: gpxfilm/webgui.py
+msgid "GPX track"
+msgstr "Ślad GPX"
+
+#: gpxfilm/webgui.py
+msgid "choose or drop a file on the window"
+msgstr "wybierz albo upuść plik na okno"
+
+#: gpxfilm/webgui.py
+msgid "Choose…"
+msgstr "Wybierz…"
+
+#: gpxfilm/webgui.py
+msgid "Track number when the file has several (empty = the program chooses)"
+msgstr "Numer śladu, gdy w pliku jest ich kilka (pusty = program wybierze sam)"
+
+#: gpxfilm/webgui.py
+msgid "times from the file, even when they look fake"
+msgstr "godziny z pliku, nawet gdy wyglądają na udawane"
+
+#: gpxfilm/webgui.py
+msgid "Distance from the watch, km (empty = from the file)"
+msgstr "Dystans z zegarka, km (pusty = z pliku)"
+
+#: gpxfilm/webgui.py
+msgid "Ascent from the watch, m (empty = from the file)"
+msgstr "Podejścia z zegarka, m (pusty = z pliku)"
+
+#: gpxfilm/webgui.py
+msgid "Title (each line on its own; empty = name from the track)"
+msgstr "Tytuł (każdy wiersz osobno; pusty = nazwa ze śladu)"
+
+#: gpxfilm/webgui.py
+msgid "Subtitle (empty = date from the track)"
+msgstr "Podtytuł (pusty = data ze śladu)"
+
+#: gpxfilm/webgui.py
+msgid "title from the place name"
+msgstr "tytuł z nazwy miejsca"
+
+#: gpxfilm/webgui.py
+msgid "Map"
+msgstr "Mapa"
+
+#: gpxfilm/webgui.py
+msgid "Map background"
+msgstr "Podkład"
+
+#: gpxfilm/webgui.py
+msgid "terrain"
+msgstr "teren"
+
+#: gpxfilm/webgui.py
+msgid "topographic"
+msgstr "topograficzna"
+
+#: gpxfilm/webgui.py
+msgid "aerial photos"
+msgstr "zdjęcia lotnicze"
+
+#: gpxfilm/webgui.py
+msgid "satellite"
+msgstr "satelita"
+
+#: gpxfilm/webgui.py
+msgid "custom address"
+msgstr "własny adres"
+
+#: gpxfilm/webgui.py
+msgid "Color style"
+msgstr "Styl barw"
+
+#: gpxfilm/webgui.py
+msgid "natural"
+msgstr "naturalny"
+
+#: gpxfilm/webgui.py
+msgid "night"
+msgstr "nocny"
+
+#: gpxfilm/webgui.py
+msgid "light"
+msgstr "jasny"
+
+#: gpxfilm/webgui.py
+msgid "gray"
+msgstr "szary"
+
+#: gpxfilm/webgui.py
+msgid "Route"
+msgstr "Trasa"
+
+#: gpxfilm/webgui.py
+msgid "Tile address with {z}/{x}/{y} or WMS with {bbox}"
+msgstr "Adres kafli z {z}/{x}/{y} albo WMS z {bbox}"
+
+#: gpxfilm/webgui.py
+msgid "Route color by data"
+msgstr "Kolor trasy według danych"
+
+#: gpxfilm/webgui.py
+msgid "one color"
+msgstr "jeden kolor"
+
+#: gpxfilm/webgui.py
+msgid "light as from the sun"
+msgstr "światło jak ze słońca"
+
+#: gpxfilm/webgui.py
+msgid "country minimap"
+msgstr "minimapa kraju"
+
+#: gpxfilm/webgui.py
+msgid "names in the background"
+msgstr "nazwy w tle"
+
+#: gpxfilm/webgui.py
+msgid "kilometer markers"
+msgstr "znaczniki kilometrów"
+
+#: gpxfilm/webgui.py
+msgid "live counters"
+msgstr "liczniki na żywo"
+
+#: gpxfilm/webgui.py
+msgid "no heart rate"
+msgstr "bez tętna"
+
+#: gpxfilm/webgui.py
+msgid "Size"
+msgstr "Rozmiar"
+
+#: gpxfilm/webgui.py
+msgid "Frames/s"
+msgstr "Klatki/s"
+
+#: gpxfilm/webgui.py
+msgid "Route, s"
+msgstr "Trasa, s"
+
+#: gpxfilm/webgui.py
+msgid "intro: camera flight from the country view"
+msgstr "intro: najazd z widoku kraju"
+
+#: gpxfilm/webgui.py
+msgid "outro: summary card"
+msgstr "outro: plansza końcowa"
+
+#: gpxfilm/webgui.py
+msgid "Flight time, s"
+msgstr "Czas najazdu, s"
+
+#: gpxfilm/webgui.py
+msgid "Summary card, s"
+msgstr "Czas planszy, s"
+
+#: gpxfilm/webgui.py
+msgid "Stops from, min"
+msgstr "Postoje od, min"
+
+#: gpxfilm/webgui.py
+msgid "How long places and peaks stay, s"
+msgstr "Jak długo widać miejscowości i szczyty, s"
+
+#: gpxfilm/webgui.py
+msgid "default about 1 s"
+msgstr "domyślnie ok. 1 s"
+
+#: gpxfilm/webgui.py
+msgid "Time from the last label coming in until they start to fade, the same for the places and peaks of the region and for the peaks along the route."
+msgstr "Czas od pojawienia się ostatniego podpisu do początku gaśnięcia, taki sam dla miejscowości i szczytów okolicy oraz dla szczytów przy trasie."
+
+#: gpxfilm/webgui.py
+msgid "Peaks in the intro"
+msgstr "Szczytów w intrze"
+
+#: gpxfilm/webgui.py
+msgid "Places in the intro"
+msgstr "Miejscowości w intrze"
+
+#: gpxfilm/webgui.py
+msgid "Intro radius, km"
+msgstr "Promień intra, km"
+
+#: gpxfilm/webgui.py
+msgid "Radius around the start within which the intro looks for the highest peaks and the main places"
+msgstr "Promień od startu, w którym intro szuka najwyższych szczytów i najważniejszych miejscowości"
+
+#: gpxfilm/webgui.py
+msgid "Music (sound file)"
+msgstr "Muzyka (plik dźwiękowy)"
+
+#: gpxfilm/webgui.py
+msgid "empty = no sound"
+msgstr "pusty = bez dźwięku"
+
+#: gpxfilm/webgui.py
+msgid "Photos on the route"
+msgstr "Zdjęcia na trasie"
+
+#: gpxfilm/webgui.py
+msgid "Folder with photos"
+msgstr "Katalog ze zdjęciami"
+
+#: gpxfilm/webgui.py
+msgid "empty = no photos"
+msgstr "pusty = bez zdjęć"
+
+#: gpxfilm/webgui.py
+msgid "Photo time, s"
+msgstr "Czas zdjęcia, s"
+
+#: gpxfilm/webgui.py
+msgid "At most (0 = all)"
+msgstr "Najwyżej (0 = wszystkie)"
+
+#: gpxfilm/webgui.py
+msgid "Clock correction, s"
+msgstr "Poprawka zegara, s"
+
+#: gpxfilm/webgui.py
+msgid "Labels"
+msgstr "Podpisy"
+
+#: gpxfilm/webgui.py
+msgid "Places along the route"
+msgstr "Miejsc przy trasie"
+
+#: gpxfilm/webgui.py
+msgid "Peaks"
+msgstr "Szczytów"
+
+#: gpxfilm/webgui.py
+msgid "Language of the film texts"
+msgstr "Język napisów"
+
+#: gpxfilm/webgui.py
+msgid "Polish"
+msgstr "polski"
+
+#: gpxfilm/webgui.py
+msgid "English"
+msgstr "angielski"
+
+#: gpxfilm/webgui.py
+msgid "Language of the map names"
+msgstr "Język nazw z mapy"
+
+#: gpxfilm/webgui.py
+msgid "e.g. it"
+msgstr "np. it"
+
+#: gpxfilm/webgui.py
+msgid "Time zone"
+msgstr "Strefa czasowa"
+
+#: gpxfilm/webgui.py
+msgid "e.g. Europe/Rome"
+msgstr "np. Europe/Rome"
+
+#: gpxfilm/webgui.py
+msgid "Labels on the map"
+msgstr "Napisy na mapie"
+
+#: gpxfilm/webgui.py
+msgid "plain"
+msgstr "zwykłe"
+
+#: gpxfilm/webgui.py
+msgid "strong"
+msgstr "mocne"
+
+#: gpxfilm/webgui.py
+msgid "on badges"
+msgstr "na plakietkach"
+
+#: gpxfilm/webgui.py
+msgid "Label size"
+msgstr "Wielkość napisów"
+
+#: gpxfilm/webgui.py
+msgid "File with your own labels"
+msgstr "Plik z własnymi podpisami"
+
+#: gpxfilm/webgui.py
+msgid "lines: 3.2 km Name or 12:39 Name"
+msgstr "wiersze: 3,2 km Nazwa albo 12:39 Nazwa"
+
+#: gpxfilm/webgui.py
+msgid "Skip places (part of the name, one per line)"
+msgstr "Pomiń miejsca (fragment nazwy, po jednym w wierszu)"
+
+#: gpxfilm/webgui.py
+msgid "Rename (old=new, one per line)"
+msgstr "Zmień nazwy (stara=nowa, po jednej w wierszu)"
+
+#: gpxfilm/webgui.py
+msgid "Font and logo"
+msgstr "Krój i znak"
+
+#: gpxfilm/webgui.py
+msgid "Custom title font (TTF file)"
+msgstr "Własny krój tytułu (plik TTF)"
+
+#: gpxfilm/webgui.py
+msgid "empty = default"
+msgstr "pusty = domyślny"
+
+#: gpxfilm/webgui.py
+msgid "Logo in the corner (PNG file)"
+msgstr "Znak w rogu (plik PNG)"
+
+#: gpxfilm/webgui.py
+msgid "empty = no logo"
+msgstr "pusty = bez znaku"
+
+#: gpxfilm/webgui.py
+msgid "Output"
+msgstr "Wynik"
+
+#: gpxfilm/webgui.py
+msgid "Film file"
+msgstr "Plik filmu"
+
+#: gpxfilm/webgui.py
+msgid "by default next to the GPX track"
+msgstr "domyślnie obok śladu GPX"
+
+#: gpxfilm/webgui.py
+msgid "Folder for slide frames"
+msgstr "Katalog na kadry do slajdów"
+
+#: gpxfilm/webgui.py
+msgid "empty = no frames"
+msgstr "pusty = bez kadrów"
+
+#: gpxfilm/webgui.py
+msgid "Quality (CRF, lower = better)"
+msgstr "Jakość (CRF, mniej = lepiej)"
+
+#: gpxfilm/webgui.py
+msgid "ffmpeg encoder"
+msgstr "Koder ffmpeg"
+
+#: gpxfilm/webgui.py
+msgid "automatic"
+msgstr "automatycznie"
+
+#: gpxfilm/webgui.py
+msgid "no OpenStreetMap data"
+msgstr "bez danych OpenStreetMap"
+
+#: gpxfilm/webgui.py
+msgid "Preview of the last frame of the film"
+msgstr "Podgląd ostatniej klatki filmu"
+
+#: gpxfilm/webgui.py
+msgid "Choose a GPX track or drop a file on this window. The preview of the last frame of the film will appear here."
+msgstr "Wybierz ślad GPX albo upuść plik na to okno. Tu pojawi się podgląd ostatniej klatki filmu."
+
+#: gpxfilm/webgui.py
+msgid "Refresh preview"
+msgstr "Odśwież podgląd"
+
+#: gpxfilm/webgui.py
+msgid "Film preview"
+msgstr "Podgląd filmu"
+
+#: gpxfilm/webgui.py
+msgid "Render film"
+msgstr "Generuj film"
+
+#: gpxfilm/webgui.py
+msgid "Stop"
+msgstr "Przerwij"
+
+#: gpxfilm/webgui.py
+msgid "Show file"
+msgstr "Pokaż plik"
+
+#: gpxfilm/webgui.py
+msgid "refresh after every change"
+msgstr "odświeżaj po każdej zmianie"
+
+#: gpxfilm/webgui.py
+msgid "The image above is the last frame of the route. “Film preview”, a quick 720p draft, shows the intro, photos, stops and outro."
+msgstr "Obraz powyżej to ostatnia klatka trasy. Intro, zdjęcia, postoje i outro pokaże „Podgląd filmu”, czyli szybka wersja robocza w 720p."
+
+#: gpxfilm/webgui.py
+msgid "The command for these settings and the messages of the program will appear here."
+msgstr "Tu pojawi się polecenie odpowiadające ustawieniom oraz komunikaty programu."
+
+#: gpxfilm/webgui.py
+msgid "Type the path by hand."
+msgstr "Wpisz ścieżkę ręcznie."
+
+#: gpxfilm/webgui.py
+msgid "the film will last about {time}"
+msgstr "film potrwa ok. {time}"
+
+#: gpxfilm/webgui.py
+msgid "route {km} km"
+msgstr "trasa {km} km"
+
+#: gpxfilm/webgui.py
+msgid "photos on the route: {matched} of {total}"
+msgstr "zdjęcia na trasie: {matched} z {total}"
+
+#: gpxfilm/webgui.py
+msgid "stops: {n}"
+msgstr "postoje: {n}"
+
+#: gpxfilm/webgui.py
+msgid "{facts}.  Labels below: click a name to change it, or × to skip it."
+msgstr "{facts}.  Podpisy poniżej: kliknij nazwę, żeby ją zmienić, albo × żeby pominąć."
+
+#: gpxfilm/webgui.py
+msgid "Rename"
+msgstr "Zmień nazwę"
+
+#: gpxfilm/webgui.py
+msgid "New name on the film:"
+msgstr "Nowa nazwa na filmie:"
+
+#: gpxfilm/webgui.py
+msgid "Skip this place"
+msgstr "Pomiń to miejsce"
+
+#: gpxfilm/webgui.py
+msgid "Skip {name}"
+msgstr "Pomiń {name}"
+
+#: gpxfilm/webgui.py
+msgid "Choose a GPX track first."
+msgstr "Najpierw wybierz ślad GPX."
+
+#: gpxfilm/webgui.py
+msgid "Drawing the preview…"
+msgstr "Rysuję podgląd…"
+
+#: gpxfilm/webgui.py
+msgid "Preview ready."
+msgstr "Podgląd gotowy."
+
+#: gpxfilm/webgui.py
+msgid "Preview failed: {error}"
+msgstr "Podgląd się nie udał: {error}"
+
+#: gpxfilm/webgui.py
+msgid "no details"
+msgstr "brak szczegółów"
+
+#: gpxfilm/webgui.py
+msgid "Preview failed. Details below."
+msgstr "Podgląd się nie udał. Szczegóły poniżej."
+
+#: gpxfilm/webgui.py
+msgid "No connection to the program. Is the terminal still open?"
+msgstr "Brak połączenia z programem. Czy terminal jest nadal otwarty?"
+
+#: gpxfilm/webgui.py
+msgid "Preparing the film preview…"
+msgstr "Przygotowuję podgląd filmu…"
+
+#: gpxfilm/webgui.py
+msgid "Rendering the film…"
+msgstr "Generuję film…"
+
+#: gpxfilm/webgui.py
+msgid "Preparing the film preview… {pct}%"
+msgstr "Przygotowuję podgląd filmu… {pct}%"
+
+#: gpxfilm/webgui.py
+msgid "Rendering the film… {pct}%"
+msgstr "Generuję film… {pct}%"
+
+#: gpxfilm/webgui.py
+msgid "Rendering failed. Details below."
+msgstr "Generowanie się nie powiodło. Szczegóły poniżej."
+
+#: gpxfilm/webgui.py
+msgid "Film preview ready (720p draft)."
+msgstr "Podgląd filmu gotowy (wersja robocza 720p)."
+
+#: gpxfilm/webgui.py
+msgid "Done: {file}"
+msgstr "Gotowe: {file}"
+
+#: gpxfilm/webgui.py
+msgid "Settings window: {url}\nTo close it, press Ctrl+C in this terminal."
+msgstr "Okno ustawień: {url}\nZamknięcie: Ctrl+C w tym terminalu."
+
+#: gpxfilm/webgui.py
+msgid "access denied"
+msgstr "brak dostępu"
+
+#: gpxfilm/webgui.py
+msgid "Choose the folder with photos"
+msgstr "Wybierz katalog ze zdjęciami"
+
+#: gpxfilm/webgui.py
+msgid "Choose a file"
+msgstr "Wybierz plik"
+
+#: gpxfilm/webgui.py
+msgid "Choose a folder"
+msgstr "Wybierz katalog"
+
+#: gpxfilm/webgui.py
+msgid "A film is already being rendered."
+msgstr "Film już się generuje."

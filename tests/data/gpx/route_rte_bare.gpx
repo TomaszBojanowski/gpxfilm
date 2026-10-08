@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="gpxfilm test" xmlns="http://www.topografix.com/GPX/1/1">
+<rte><name>Same punkty</name>
+<rtept lat="49.500000" lon="20.000000"></rtept>
+<rtept lat="49.501500" lon="20.001500"></rtept>
+<rtept lat="49.503000" lon="20.003000"></rtept>
+<rtept lat="49.504500" lon="20.004500"></rtept>
+<rtept lat="49.506000" lon="20.006000"></rtept>
+<rtept lat="49.507500" lon="20.007500"></rtept>
+<rtept lat="49.509000" lon="20.009000"></rtept>
+<rtept lat="49.510500" lon="20.010500"></rtept>
+<rtept lat="49.512000" lon="20.012000"></rtept>
+<rtept lat="49.513500" lon="20.013500"></rtept>
+<rtept lat="49.515000" lon="20.015000"></rtept>
+<rtept lat="49.516500" lon="20.016500"></rtept>
+<rtept lat="49.518000" lon="20.018000"></rtept>
+<rtept lat="49.519500" lon="20.019500"></rtept>
+<rtept lat="49.521000" lon="20.021000"></rtept>
+</rte>
+</gpx>

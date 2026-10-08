@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="gpxfilm test" xmlns="http://www.topografix.com/GPX/1/1">
+<trk><name>Ślad testowy</name><trkseg>
+<trkpt lat="49.500000" lon="20.000000"><time>2025-06-14T08:00:00Z</time></trkpt>
+<trkpt lat="49.500000" lon="20.000000"><time>2025-06-14T08:00:00Z</time><ele>800</ele></trkpt>
+<trkpt lat="49.500400" lon="20.000400"><time>2025-06-14T08:00:10Z</time></trkpt>
+<trkpt lat="49.500400" lon="20.000400"><time>2025-06-14T08:00:10Z</time><ele>801</ele></trkpt>
+<trkpt lat="49.500800" lon="20.000800"><time>2025-06-14T08:00:20Z</time></trkpt>
+<trkpt lat="49.500800" lon="20.000800"><time>2025-06-14T08:00:20Z</time><ele>802</ele></trkpt>
+<trkpt lat="49.501200" lon="20.001200"><time>2025-06-14T08:00:30Z</time></trkpt>
+<trkpt lat="49.501200" lon="20.001200"><time>2025-06-14T08:00:30Z</time><ele>803</ele></trkpt>
+<trkpt lat="49.501600" lon="20.001600"><time>2025-06-14T08:00:40Z</time></trkpt>
+<trkpt lat="49.501600" lon="20.001600"><time>2025-06-14T08:00:40Z</time><ele>804</ele></trkpt>
+<trkpt lat="49.502000" lon="20.002000"><time>2025-06-14T08:00:50Z</time></trkpt>
+<trkpt lat="49.502000" lon="20.002000"><time>2025-06-14T08:00:50Z</time><ele>805</ele></trkpt>
+<trkpt lat="49.502400" lon="20.002400"><time>2025-06-14T08:01:00Z</time></trkpt>
+<trkpt lat="49.502400" lon="20.002400"><time>2025-06-14T08:01:00Z</time><ele>806</ele></trkpt>
+<trkpt lat="49.502800" lon="20.002800"><time>2025-06-14T08:01:10Z</time></trkpt>
+<trkpt lat="49.502800" lon="20.002800"><time>2025-06-14T08:01:10Z</time><ele>807</ele></trkpt>
+<trkpt lat="49.503200" lon="20.003200"><time>2025-06-14T08:01:20Z</time></trkpt>
+<trkpt lat="49.503200" lon="20.003200"><time>2025-06-14T08:01:20Z</time><ele>808</ele></trkpt>
+<trkpt lat="49.503600" lon="20.003600"><time>2025-06-14T08:01:30Z</time></trkpt>
+<trkpt lat="49.503600" lon="20.003600"><time>2025-06-14T08:01:30Z</time><ele>809</ele></trkpt>
+<trkpt lat="49.504000" lon="20.004000"><time>2025-06-14T08:01:40Z</time></trkpt>
+<trkpt lat="49.504000" lon="20.004000"><time>2025-06-14T08:01:40Z</time><ele>810</ele></trkpt>
+<trkpt lat="49.504400" lon="20.004400"><time>2025-06-14T08:01:50Z</time></trkpt>
+<trkpt lat="49.504400" lon="20.004400"><time>2025-06-14T08:01:50Z</time><ele>811</ele></trkpt>
+</trkseg></trk>
+</gpx>

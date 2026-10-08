@@ -1,0 +1,13 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+gpxfilm/_version.py
+build/
+dist/
+.venv/
+venv/
+.pytest_cache/
+*.mp4
+.DS_Store
+tests/data/cache/backgrounds/
+tests/data/cache/tla/

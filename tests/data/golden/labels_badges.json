@@ -1,0 +1,43 @@
+{
+ "places": [
+  {
+   "name": "Cappella degli Alpini",
+   "km": 0.7
+  },
+  {
+   "name": "Rifugio Lavaredo",
+   "km": 1.3
+  },
+  {
+   "name": "Forcella Lavaredo",
+   "km": 2.1
+  },
+  {
+   "name": "Dreizinnenhütte",
+   "km": 3.8
+  },
+  {
+   "name": "Malga Langalm",
+   "km": 5.3
+  },
+  {
+   "name": "Forcella Col di Mezzo",
+   "km": 6.0
+  }
+ ],
+ "peaks": [
+  "Cima Ovest di Lavaredo"
+ ],
+ "photos": {
+  "matched": 0,
+  "total": 0
+ },
+ "stops": 1,
+ "duration": 21.4,
+ "distance_km": 7.5,
+ "country": "Włochy",
+ "name_languages": [
+  "pl",
+  "it"
+ ]
+}
