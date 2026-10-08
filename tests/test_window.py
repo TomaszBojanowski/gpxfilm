@@ -109,7 +109,7 @@ def test_the_server_gives_the_messages_with_their_count(tmp_path):
             while not (s := status())["done"] or s["running"]:
                 assert time.monotonic() < deadline
                 time.sleep(0.1)
-            assert s["n"] == len(s["log"]) > 14 and s["log"][0].startswith("usage:") and not s["ok"]
+            assert s["n"] == len(s["log"]) > 14 and s["log"][0].startswith("użycie:") and not s["ok"]
             counts.append(s["n"])
         assert counts[0] == counts[1]                    # each job has its own messages
         assert len(post("/preview", wrong)["log"].splitlines()) > 14

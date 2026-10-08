@@ -48,10 +48,17 @@ from .webgui import run_gui
 
 
 SLIDE_MAP, SLIDE_FINISH = NC_("slide file name", "map"), NC_("slide file name", "finish")   # 00-map.png, 99-finish.png
+ARGPARSE_TEXTS = (   # texts of argparse itself that our help and errors show; argparse would look for them in its own catalog
+    N_("usage: "), N_("positional arguments"), N_("options"), N_("show this help message and exit"),
+    N_("%(prog)s: error: %(message)s\n"), N_("unrecognized arguments: %s"), N_("expected one argument"),
+    N_("invalid %(type)s value: %(value)r"), N_("invalid choice: %(value)r (choose from %(choices)s)"),
+    N_("ambiguous option: %(option)s could match %(matches)s"), N_("ignored explicit argument %r"),
+)
 
 
 def main() -> None:
-    ap = argparse.ArgumentParser(prog="gpxfilm", description=_("A film of a GPX route on a shaded terrain map."))
+    argparse._, argparse.ngettext = ui().gettext, ui().ngettext   # argparse looks these up each time it shows a text
+    ap =argparse.ArgumentParser(prog="gpxfilm", description=_("A film of a GPX route on a shaded terrain map."))
     ap.add_argument("gpx", type=Path, nargs="?", help=_("GPX file with the track"))
     ap.add_argument("--gui", action="store_true", help=_("open the settings window in the browser (preview and render the film without typing options)"))
     ap.add_argument("--check-maps", action="store_true", help=_("check which sources of aerial photos (--map aerial) answer right now, and exit"))
