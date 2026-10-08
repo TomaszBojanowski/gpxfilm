@@ -178,6 +178,54 @@ msgctxt "placeholder of a count"
 msgid "N"
 msgstr "LICZBA"
 
+#. texts of argparse, the module that reads the options
+#: gpxfilm/cli.py
+msgid "usage: "
+msgstr "użycie: "
+
+#: gpxfilm/cli.py
+msgid "positional arguments"
+msgstr "argumenty pozycyjne"
+
+#: gpxfilm/cli.py
+msgid "options"
+msgstr "opcje"
+
+#: gpxfilm/cli.py
+msgid "show this help message and exit"
+msgstr "pokaż tę pomoc i zakończ"
+
+#: gpxfilm/cli.py
+msgid "%(prog)s: error: %(message)s\n"
+msgstr "%(prog)s: błąd: %(message)s\n"
+
+#: gpxfilm/cli.py
+msgid "unrecognized arguments: %s"
+msgstr "nierozpoznane argumenty: %s"
+
+#. after "argument --fps:"
+#: gpxfilm/cli.py
+msgid "expected one argument"
+msgstr "oczekiwano jednego argumentu"
+
+#. %(type)s is a name from the code, such as int or float
+#: gpxfilm/cli.py
+msgid "invalid %(type)s value: %(value)r"
+msgstr "nieprawidłowa wartość typu %(type)s: %(value)r"
+
+#: gpxfilm/cli.py
+msgid "invalid choice: %(value)r (choose from %(choices)s)"
+msgstr "nieprawidłowy wybór: %(value)r (do wyboru: %(choices)s)"
+
+#: gpxfilm/cli.py
+msgid "ambiguous option: %(option)s could match %(matches)s"
+msgstr "niejednoznaczna opcja: %(option)s może oznaczać %(matches)s"
+
+#. a value given to an option that takes none, as in --gui=yes
+#: gpxfilm/cli.py
+msgid "ignored explicit argument %r"
+msgstr "pominięto podaną wartość %r"
+
 #: gpxfilm/cli.py
 msgid "A film of a GPX route on a shaded terrain map."
 msgstr "Film z trasy GPX na cieniowanej mapie terenu."

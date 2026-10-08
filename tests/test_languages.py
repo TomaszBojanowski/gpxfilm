@@ -13,7 +13,7 @@ from offline import ROOT, offline_env, offline_frames
 from PIL import Image
 from test_frames import BAD_LEVEL, CASES, GOLDEN, MAX_BAD_SHARE, MAX_MEAN_DIFF
 
-from gpxfilm import i18n, text, webgui
+from gpxfilm import cli, i18n, text, webgui
 
 DATA = ROOT / "tests" / "data"
 POLISH = re.compile(r"[ąćęłńóśźż]|\b(się|jest|nie|albo|oraz|gdy|tylko|przez|plik|pliku|ślad|trasa|trasy|kafli|podkład|pobieram|"
@@ -81,6 +81,26 @@ def test_the_film_words_match_the_option_names():
 def test_errors_follow_the_system_language(tmp_path, args, en, pl):
     assert en in run(tmp_path, "en", *args).stderr
     assert pl in run(tmp_path, "pl", *args).stderr
+
+
+def test_the_words_of_argparse_follow_the_system_language(tmp_path):
+    """The headings and errors argparse writes itself come from po/pl.po too, not from the catalog of argparse."""
+    en, pl = (run(tmp_path, language, "--help").stdout for language in ("en", "pl"))
+    assert en.startswith("usage: gpxfilm") and "\noptions:\n" in en and "show this help message and exit" in en
+    assert pl.startswith("użycie: gpxfilm") and "\nargumenty pozycyjne:\n" in pl and "\nopcje:\n" in pl
+    assert "pokaż tę pomoc i zakończ" in pl and not re.search(r"usage|positional arguments|options:|show this help", pl)
+    en, pl = (run(tmp_path, language, "--nope", "x.gpx").stderr for language in ("en", "pl"))
+    assert en.startswith("usage: ") and en.endswith("gpxfilm: error: unrecognized arguments: --nope\n")
+    assert pl.startswith("użycie: ") and pl.endswith("gpxfilm: błąd: nierozpoznane argumenty: --nope\n")
+    assert run(tmp_path, "pl", "--label-style", "xx").stderr.endswith(
+        "gpxfilm: błąd: argument --label-style: nieprawidłowy wybór: 'xx' (do wyboru: 'plain', 'strong', 'badges')\n")
+
+
+def test_the_texts_of_argparse_keep_their_fields():
+    pl = i18n.Translator("pl")
+    fields = lambda s: sorted(re.findall(r"%(?:\(\w+\))?[sr]", s))
+    for text in cli.ARGPARSE_TEXTS:
+        assert pl.gettext(text) != text and fields(pl.gettext(text)) == fields(text), text
 
 
 def test_an_english_system_gets_english_messages_report_and_film(tmp_path):
