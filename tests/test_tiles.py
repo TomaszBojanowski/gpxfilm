@@ -5,7 +5,6 @@ import threading
 import time
 from collections import Counter
 from pathlib import Path
-from types import SimpleNamespace
 from urllib.parse import parse_qs, urlparse
 
 import numpy as np
@@ -92,7 +91,7 @@ def server(monkeypatch, tmp_path):
         srv.slept.append(v)
         srv.events.append(("sleep", v))
 
-    monkeypatch.setattr(tiles, "time", SimpleNamespace(sleep=sleep))
+    monkeypatch.setattr(tiles, "rest", sleep)
     monkeypatch.setattr(tiles, "TILE_TIMEOUT", 0.5)
     monkeypatch.setattr(tiles, "CACHE", tmp_path / "cache")
     monkeypatch.setattr(terrain, "CACHE", tmp_path / "cache")
@@ -314,19 +313,16 @@ def test_a_preferred_source_that_fails_is_named_and_not_stored(server, frame, ca
 def _relief(server, frame, monkeypatch, sources):
     proj, lay = frame
     monkeypatch.setattr(terrain, "load_dem", lambda proj_, lay_, quiet=False: np.full((lay.H, lay.W), 2000.0, np.float32))
-    monkeypatch.setitem(terrain.LOOK, "map", "aerial")
-    monkeypatch.setitem(terrain.LOOK, "sources", sources)
-    monkeypatch.setitem(terrain.LOOK, "credit", "")
     monkeypatch.setitem(MAPS, "satellite", (f"{server.url}/sat/{{z}}/{{x}}/{{y}}.png", 14, MAPS["satellite"][2]))
-    img, _ = terrain.relief(proj, lay, {"elements": []}, contours=False, quiet=True, tiles=True)
-    return img, list((tiles.CACHE / "backgrounds").glob("*.npz")) if (tiles.CACHE / "backgrounds").exists() else []
+    img, _, look = terrain.relief(proj, lay, {"elements": []}, terrain.Look(map="aerial", sources=sources), contours=False, quiet=True, tiles=True)
+    return img, list((tiles.CACHE / "backgrounds").glob("*.npz")) if (tiles.CACHE / "backgrounds").exists() else [], look
 
 
 def test_a_dropped_aerial_source_gives_satellite_imagery_for_the_whole_frame(server, frame, monkeypatch, capsys):
     server.plan = lambda path, xy, k: ((503, b"", {}) if path.startswith("/aerial/") and xy[0] % 3 == 0 and len(server.asked) > 1
                                        else (200, _png((200, 40, 40) if path.startswith("/sat/") else (60, 140, 60)), {}))
-    img, stored = _relief(server, frame, monkeypatch, (_source(server),))
-    assert terrain.LOOK["map"] == "satellite" and terrain.LOOK["credit"] == MAPS["satellite"][2]
+    img, stored, look = _relief(server, frame, monkeypatch, (_source(server),))
+    assert look.map == "satellite" and look.credit == MAPS["satellite"][2]
     assert "biorę dla całego kadru zdjęcia satelitarne Sentinel-2" in capsys.readouterr().err
     assert not stored                                           # next time the aerial photos may come
     r, g = img[..., 0].mean(), img[..., 1].mean()
@@ -334,6 +330,6 @@ def test_a_dropped_aerial_source_gives_satellite_imagery_for_the_whole_frame(ser
 
 
 def test_only_a_complete_background_is_stored(server, frame, monkeypatch):
-    _, stored = _relief(server, frame, monkeypatch, (_source(server),))
-    assert len(stored) == 1 and terrain.LOOK["credit"] == AERIAL
+    _, stored, look = _relief(server, frame, monkeypatch, (_source(server),))
+    assert len(stored) == 1 and look.credit == AERIAL
 

@@ -5,7 +5,6 @@ import hashlib
 import io
 import math
 import re
-import time
 import urllib.error
 from pathlib import Path
 
@@ -15,7 +14,8 @@ from scipy import ndimage as ndi
 
 from .geo import R_EARTH, Layout, Proj
 from .i18n import _, credit, ngettext, ui
-from .net import CACHE, cache_dir, http_get
+from .net import CACHE, cache_dir, http_get, store
+from .task import check, progress, rest
 from .util import clamp, log
 
 
@@ -90,7 +90,7 @@ def load_tile(url: str, path: Path, ts: int, wms: bool = False):
         except Exception:  # noqa: BLE001 – no answer or a broken connection: maybe next time
             return Failed(silent=True)
         finally:
-            time.sleep(GAP[wms])
+            rest(GAP[wms])
     try:
         im = Image.open(io.BytesIO(raw))
         im.load()
@@ -100,8 +100,7 @@ def load_tile(url: str, path: Path, ts: int, wms: bool = False):
             return None                           # an empty answer, or a WMTS tile out of range: no data here
         return Failed()                           # a page or an error report instead of the image, or an image cut short
     if not path.exists():
-        path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_bytes(raw)
+        store(path, raw)
     if im.size != (ts, ts):
         if im.width in (256, 512) and im.width != ts:
             return im.width                           # the server gives tiles of another size than assumed
@@ -136,6 +135,7 @@ def raster_one(pr: Proj, lay: Layout, url: str, zmax: int, probe: bool):
             z -= 1
 
     def tile(z: int, n: int, tx: int, ty: int, ts: int):
+        check()
         return load_tile(tile_url(url, z, tx % n, min(max(ty, 0), n - 1), ts), cdir / f"{z}-{ts}" / str(tx) / str(ty), ts, wms)
 
     def first(z: int, n: int, tx: int, ty: int, ts: int):   # the middle of the frame, with all its tries
@@ -146,9 +146,9 @@ def raster_one(pr: Proj, lay: Layout, url: str, zmax: int, probe: bool):
             if not got.again:
                 break
             if k + 1 < TILE_TRIES:
-                time.sleep(max(got.wait, pause * 2 ** k))
+                rest(max(got.wait, pause * 2 ** k))
             elif got.wait:                            # the next source may live on the same server
-                time.sleep(got.wait)
+                rest(got.wait)
         raise SourceDown()
 
     TS = 512 if wms else 256
@@ -169,6 +169,7 @@ def raster_one(pr: Proj, lay: Layout, url: str, zmax: int, probe: bool):
         nonlocal row
         failed = []
         for c in todo:
+            progress("map", len(tiles) + len(missing), len(cells))
             got = tile(z, n, *c, TS)
             if isinstance(got, Failed):
                 (failed if got.again else missing).append(c)
@@ -176,7 +177,7 @@ def raster_one(pr: Proj, lay: Layout, url: str, zmax: int, probe: bool):
                 if row >= SILENT:                     # it stopped answering
                     raise SourceDown()
                 if got.wait:                          # the server said when to ask again: nothing goes out before that
-                    time.sleep(got.wait)
+                    rest(got.wait)
             else:
                 tiles[c], row = got, 0
         return failed
@@ -186,9 +187,9 @@ def raster_one(pr: Proj, lay: Layout, url: str, zmax: int, probe: bool):
         if not todo:
             break
         if k + 1 < TILE_TRIES:
-            time.sleep(pause * 2 ** k)
+            rest(pause * 2 ** k)
     if 0 < len(todo) <= LAST_CHANCE[0]:               # one or two tiles short: one more try after a longer pause
-        time.sleep(LAST_CHANCE[1])
+        rest(LAST_CHANCE[1])
         todo = ask(todo)
     missing += todo
     if len(missing) > MAX_MISSING * len(cells):

@@ -111,11 +111,10 @@ def test_credits_are_translated_part_by_part(name):
 def test_the_credit_on_the_frame_follows_the_film_language(monkeypatch):
     from gpxfilm import compose
     monkeypatch.setenv("LANGUAGE", "en")                                   # messages in English, the film in Polish
-    monkeypatch.setitem(compose.LOOK, "credit", _credits()["topo+terrain"])
-    assert compose.frame_credit("pl", "default") == POLISH_CREDITS["topo+terrain"]
-    assert compose.frame_credit("en", "default") == _credits()["topo+terrain"]
-    monkeypatch.delitem(compose.LOOK, "credit")
-    assert compose.frame_credit("pl", "default") == "default"              # the terrain drawing has its own credit text
+    topo = _credits()["topo+terrain"]
+    assert compose.frame_credit(topo, "pl", "default") == POLISH_CREDITS["topo+terrain"]
+    assert compose.frame_credit(topo, "en", "default") == topo
+    assert compose.frame_credit(None, "pl", "default") == "default"              # the terrain drawing has its own credit text
 
 
 def test_names_from_openstreetmap_are_credited_on_every_background(monkeypatch):
@@ -123,12 +122,10 @@ def test_names_from_openstreetmap_are_credited_on_every_background(monkeypatch):
     it: the credit names it then, once, and not when the film has no data from it (--no-osm)."""
     from gpxfilm import compose
     aerial = "Orthophotomap: Główny Urząd Geodezji i Kartografii, geoportal.gov.pl"
-    monkeypatch.setitem(compose.LOOK, "credit", aerial)
-    assert compose.frame_credit("en", "default", names=True) == aerial + "; Names: © OpenStreetMap"
-    assert compose.frame_credit("pl", "default", names=True) == "Ortofotomapa: Główny Urząd Geodezji i Kartografii, geoportal.gov.pl; Nazwy: © OpenStreetMap"
-    assert compose.frame_credit("en", "default", names=False) == aerial
-    monkeypatch.setitem(compose.LOOK, "credit", _credits()["topo+terrain"])
-    assert compose.frame_credit("en", "default", names=True) == _credits()["topo+terrain"]   # it names OpenStreetMap already
+    assert compose.frame_credit(aerial, "en", "default", names=True) == aerial + "; Names: © OpenStreetMap"
+    assert compose.frame_credit(aerial, "pl", "default", names=True) == "Ortofotomapa: Główny Urząd Geodezji i Kartografii, geoportal.gov.pl; Nazwy: © OpenStreetMap"
+    assert compose.frame_credit(aerial, "en", "default", names=False) == aerial
+    assert compose.frame_credit(_credits()["topo+terrain"], "en", "default", names=True) == _credits()["topo+terrain"]   # it names OpenStreetMap already
 
 
 @pytest.mark.parametrize("env, language", [({"AppleLocale": "pl_PL\n"}, "pl"), ({"AppleLocale": "en_PL\n"}, "en"), ({}, "en")])

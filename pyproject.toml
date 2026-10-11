@@ -35,7 +35,7 @@ package-dir = { "gpxfilm.po" = "po" }   # the translations, installed inside the
 
 [tool.setuptools_scm]
 version_file = "gpxfilm/_version.py"
-fallback_version = "0.1.0"           # a copy of the source tree without the git history and not made by git archive
+fallback_version = "0.2.0"           # a copy of the source tree without the git history and not made by git archive
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

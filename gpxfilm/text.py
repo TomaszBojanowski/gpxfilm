@@ -6,6 +6,7 @@ import os
 import re
 import shutil
 import subprocess
+from dataclasses import dataclass
 from pathlib import Path
 
 import numpy as np
@@ -14,7 +15,7 @@ from PIL import Image, ImageDraw, ImageFilter, ImageFont
 from .draw import MUTE, Sprite
 from .geo import LIMITS
 from .i18n import N_, NC_, translator
-from .net import CACHE, http_get
+from .net import CACHE, http_get, store
 
 # Pillow lays text out with libraqm when it finds the FriBiDi library, otherwise with its basic engine (no kerning).
 # GPXFILM_TEXT_LAYOUT=basic forces the basic engine, so the reference tests give the same frames on every machine.
@@ -49,8 +50,7 @@ class Fonts:
                 try:
                     css = http_get(f"https://fonts.googleapis.com/css2?family={fam.replace(' ', '+')}:wght@{wgt}", tries=2).decode()
                     url = re.search(r"url\((https://[^)]+\.ttf)\)", css).group(1)
-                    p.parent.mkdir(parents=True, exist_ok=True)
-                    p.write_bytes(http_get(url, tries=2))
+                    store(p, http_get(url, tries=2))
                 except Exception:  # noqa: BLE001 – without a network, use a system typeface
                     p = None
             if p is None and shutil.which("fc-match"):
@@ -71,15 +71,19 @@ class Fonts:
         return self.cache[k]
 
 
-LABEL = {"style": "plain", "scale": 1.0}   # look of the map labels: plain, strong (thick outline) or badges (dark badge); size
+@dataclass(frozen=True)
+class LabelLook:
+    """The look of the labels on the map: plain, strong (thick outline) or badges (dark badge), and their size."""
+    style: str = "plain"
+    scale: float = 1.0
 
 
-def text_sprite(rows, K: float, align: str = "left", halo: bool = True, label: bool = False) -> Sprite:
-    """rows: list of (text, font, RGBA color, row height in pixels). label=True marks a label on the map: it gets the chosen
-    style and size."""
+def text_sprite(rows, K: float, align: str = "left", halo: bool = True, label: LabelLook | None = None) -> Sprite:
+    """rows: list of (text, font, RGBA color, row height in pixels). label marks a label on the map: it gets this style and
+    size."""
     style, px_, py_ = "plain", 0, 0
-    if label:
-        style, sc = LABEL["style"], LABEL["scale"]
+    if label is not None:
+        style, sc = label.style, label.scale
         if sc != 1.0:
             rows = [(t, f.font_variant(size=max(6, int(round(f.size * sc)))), c, lh * sc) for t, f, c, lh in rows]
         if style != "plain":                         # gray second rows (elevation, time) turn light; background names keep their colors

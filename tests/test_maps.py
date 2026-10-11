@@ -31,11 +31,8 @@ def test_what_fills_the_gaps_is_credited(mapa, gap, satellite, credit, monkeypat
     monkeypatch.setattr(terrain, "raster_map", lambda proj, lay_, src: main if src == sources else sat)
     monkeypatch.setattr(terrain, "load_dem", lambda proj, lay_, quiet=False: np.full((lay.H, lay.W), 2000.0, np.float32))
     monkeypatch.setattr(terrain, "CACHE", tmp_path)
-    monkeypatch.setitem(terrain.LOOK, "map", mapa)
-    monkeypatch.setitem(terrain.LOOK, "sources", sources)
-    monkeypatch.setitem(terrain.LOOK, "credit", "")
-    terrain.relief(tr.proj, lay, {"elements": []}, contours=False, quiet=True, tiles=True)
-    assert terrain.LOOK["credit"] == credit
+    look = terrain.relief(tr.proj, lay, {"elements": []}, terrain.Look(map=mapa, sources=sources), contours=False, quiet=True, tiles=True)[2]
+    assert look.credit == credit
 
 
 def test_a_satellite_patch_with_its_own_gap_shows_the_terrain_there(monkeypatch, tmp_path):
@@ -51,12 +48,9 @@ def test_a_satellite_patch_with_its_own_gap_shows_the_terrain_there(monkeypatch,
     monkeypatch.setattr(terrain, "raster_map", lambda proj, lay_, src: main if src == sources else sat)
     monkeypatch.setattr(terrain, "load_dem", lambda proj, lay_, quiet=False: np.full((lay.H, lay.W), 2000.0, np.float32))
     monkeypatch.setattr(terrain, "CACHE", tmp_path)
-    monkeypatch.setitem(terrain.LOOK, "map", "aerial")
-    monkeypatch.setitem(terrain.LOOK, "sources", sources)
-    monkeypatch.setitem(terrain.LOOK, "credit", "")
-    img, _ = terrain.relief(tr.proj, lay, {"elements": []}, contours=False, quiet=True, tiles=True)
+    img, _, look = terrain.relief(tr.proj, lay, {"elements": []}, terrain.Look(map="aerial", sources=sources), contours=False, quiet=True, tiles=True)
     assert img[:50, :30].max(-1).min() > 0.1                   # no black square where both are missing
-    assert terrain.LOOK["credit"] == f"{AERIAL}; {SENTINEL}; {TERRAIN}"
+    assert look.credit == f"{AERIAL}; {SENTINEL}; {TERRAIN}"
     assert not (tmp_path / "backgrounds").exists() or not list((tmp_path / "backgrounds").glob("*.npz"))   # incomplete: not stored
 
 
@@ -68,6 +62,5 @@ def test_the_italian_photos_of_2012_name_who_took_them_and_who_serves_them(monke
     from gpxfilm.sources import AERIAL as SOURCES
     credit = next(src[2] for src in SOURCES["IT"] if "ortofoto_colore_12" in src[0])
     assert credit == "Ortofoto 2012: AGEA, Geoportale Nazionale (MASE)"
-    monkeypatch.setitem(compose.LOOK, "credit", credit)
-    assert compose.frame_credit("en", "", names=True) == credit + "; Names: © OpenStreetMap"
-    assert compose.frame_credit("pl", "", names=True) == credit + "; Nazwy: © OpenStreetMap"
+    assert compose.frame_credit(credit, "en", "", names=True) == credit + "; Names: © OpenStreetMap"
+    assert compose.frame_credit(credit, "pl", "", names=True) == credit + "; Nazwy: © OpenStreetMap"

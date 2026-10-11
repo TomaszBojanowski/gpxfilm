@@ -467,6 +467,10 @@ msgid "force an ffmpeg encoder, e.g. libx264"
 msgstr "wymuś koder ffmpeg, np. libx264"
 
 #: gpxfilm/cli.py
+msgid "codec of the film: h264 (plays everywhere, the default) or hevc (a smaller file, for newer devices)"
+msgstr "kodek filmu: h264 (odtwarza się wszędzie, domyślny) albo hevc (mniejszy plik, dla nowszych urządzeń)"
+
+#: gpxfilm/cli.py
 msgid "The settings file {file} uses old names. They work, but replace them with the new ones:\n{changes}\nThis notice appears again only after the file changes."
 msgstr "Plik ustawień {file} używa starych nazw. Działają, ale zamień je na nowe:\n{changes}\nTa informacja pojawi się znowu dopiero po zmianie pliku."
 
@@ -652,9 +656,17 @@ msgstr[2] "Szczyty w intrze: {n} najwyższych w promieniu {radius} km od startu"
 msgid "Warning: ffmpeg has no libx264, encoding with {encoder}."
 msgstr "Uwaga: ffmpeg nie ma libx264, koduję przez {encoder}."
 
+#: gpxfilm/settings.py
+msgid "The encoder {encoder} does not make {codec} films: leave out --codec or --encoder, or make them agree."
+msgstr "Koder {encoder} nie tworzy filmów {codec}: pomiń --codec albo --encoder, albo uzgodnij je ze sobą."
+
 #: gpxfilm/film.py
-msgid "ffmpeg has none of the encoders: libx264, h264_videotoolbox, libopenh264, libx265, libsvtav1."
-msgstr "ffmpeg nie ma żadnego z koderów: libx264, h264_videotoolbox, libopenh264, libx265, libsvtav1."
+msgid "This ffmpeg has no {codec} encoder ({encoders}). It has one for {other}: use --codec {option}."
+msgstr "Ten ffmpeg nie ma kodera {codec} ({encoders}). Ma koder {other}: użyj --codec {option}."
+
+#: gpxfilm/film.py
+msgid "This ffmpeg has no {codec} encoder ({encoders})."
+msgstr "Ten ffmpeg nie ma kodera {codec} ({encoders})."
 
 #: gpxfilm/film.py
 msgid "ffmpeg was not found (Fedora: sudo dnf install ffmpeg, macOS: brew install ffmpeg)."
@@ -1364,6 +1376,22 @@ msgid "ffmpeg encoder"
 msgstr "Koder ffmpeg"
 
 #: gpxfilm/webgui.py
+msgid "Codec"
+msgstr "Kodek"
+
+#: gpxfilm/webgui.py
+msgid "compatible (H.264)"
+msgstr "zgodny (H.264)"
+
+#: gpxfilm/webgui.py
+msgid "smaller file (HEVC)"
+msgstr "mniejszy plik (HEVC)"
+
+#: gpxfilm/webgui.py
+msgid "this ffmpeg cannot make it"
+msgstr "ten ffmpeg go nie obsługuje"
+
+#: gpxfilm/webgui.py
 msgid "automatic"
 msgstr "automatycznie"
 
@@ -1498,6 +1526,14 @@ msgstr "Generuję film… {pct}%"
 #: gpxfilm/webgui.py
 msgid "Rendering failed. Details below."
 msgstr "Generowanie się nie powiodło. Szczegóły poniżej."
+
+#: gpxfilm/webgui.py
+msgid "Stopped."
+msgstr "Zatrzymano."
+
+#: gpxfilm/webgui.py
+msgid "Rendering stopped."
+msgstr "Zatrzymano generowanie."
 
 #: gpxfilm/webgui.py
 msgid "Film preview ready (720p draft)."

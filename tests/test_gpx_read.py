@@ -9,6 +9,7 @@ import numpy as np
 import pytest
 
 from gpxfilm.geo import prep_track, read_gpx
+from gpxfilm.task import Failure
 from offline import PLAIN, offline_run
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -17,7 +18,7 @@ GPX = ROOT / "tests" / "data" / "gpx"
 
 def exits(name: str) -> str:
     """The message the program ends with for this file."""
-    with pytest.raises(SystemExit) as e:
+    with pytest.raises(Failure) as e:
         read_gpx(GPX / name)
     return str(e.value)
 
@@ -275,7 +276,7 @@ def test_one_day_of_touching_tracks():
 
 
 def test_track_choice_out_of_range():
-    with pytest.raises(SystemExit) as e:
+    with pytest.raises(Failure) as e:
         read_gpx(GPX / "multi_apart.gpx", track=4)
     assert "Nie ma numeru 4: w pliku są 3 ślady." in str(e.value)
 
@@ -412,7 +413,7 @@ def test_waypoint_beyond_the_map(capsys):
 
 @pytest.mark.parametrize("name, words", [("one_place.gpx", "leżą w jednym miejscu"), ("one_long_stop.gpx", "jeden postój")])
 def test_track_without_extent(name, words, capsys):
-    with pytest.raises(SystemExit) as e:
+    with pytest.raises(Failure) as e:
         prep_track(read_gpx(GPX / name))
     assert words in str(e.value)
     assert "Wysokość z pliku" not in capsys.readouterr().err      # no promise of work that will not happen

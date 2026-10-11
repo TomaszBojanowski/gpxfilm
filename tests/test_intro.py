@@ -16,6 +16,7 @@ from scipy import ndimage as ndi
 
 from gpxfilm import i18n, webgui
 from gpxfilm.film import peak_show
+from gpxfilm.settings import Settings
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "tests" / "data"
@@ -235,7 +236,7 @@ def test_skipped_and_renamed_peaks_in_the_pause(monkeypatch):
     cm = SimpleNamespace(K=1.0, start=lambda u: (1200.0, 500.0), spot=lambda u, x, y: (x, y))
     sc = SimpleNamespace(fonts=SimpleNamespace(get=lambda *a: None), title_sp=SimpleNamespace(w=400), sub_sp=None, sub_y=300,
                          prefs=["pl"], rename={"Sorapiss": "Sorapis", "Antelao": "Antelao Peak"}, tri=SimpleNamespace(w=24))
-    A = SimpleNamespace(intro_peaks=5, intro_places=0, no_osm=False, intro_radius=20.0, skip=["sorapiss", "peak"])
+    A = Settings(intro_peaks=5, intro_places=0, skip=("sorapiss", "peak"))
     u, got = film.plan_pause(A, None, cm, sc, 30)
     assert u == 0.5 and [p[4].rows[0][0] for p in got] == ["Antelao Peak", "Monte Cristallo"]   # "peak" is only in the new name
     assert [p[0] for p in got] == [0, 1]                                                      # one by one
@@ -253,7 +254,7 @@ def _pause(monkeypatch, places, peaks=(), width=lambda rows: 120, **opts):
     cm = SimpleNamespace(K=1.0, start=lambda u: (1200.0, 500.0), spot=lambda u, x, y: (x, y))
     sc = SimpleNamespace(fonts=SimpleNamespace(get=lambda *a: None), title_sp=SimpleNamespace(w=400), sub_sp=None, sub_y=300,
                          prefs=["pl", "it"], rename={"Auronzo di Cadore": "Auronzo"}, tri=SimpleNamespace(w=24))
-    A = SimpleNamespace(**{"intro_peaks": 5, "intro_places": 4, "no_osm": False, "intro_radius": 20.0, "skip": [], **opts})
+    A = Settings(**opts)
     return film.plan_pause(A, None, cm, sc, 30)
 
 

@@ -20,9 +20,8 @@ FONT = ImageFont.truetype(str(DATA / "cache" / "fonts" / "Figtree-600.ttf"), 26,
 
 
 def _label(monkeypatch, style="plain", size=1.0, label=True):
-    monkeypatch.setitem(text.LABEL, "style", style)
-    monkeypatch.setitem(text.LABEL, "scale", size)
-    return text.text_sprite([("Rifugio", FONT, WHITE, 30), ("2405 m", FONT, MUTE, 26)], 1.0, "left", label=label)
+    return text.text_sprite([("Rifugio", FONT, WHITE, 30), ("2405 m", FONT, MUTE, 26)], 1.0, "left",
+                            label=text.LabelLook(style, size) if label else None)
 
 
 def _rgba(sp):
@@ -66,10 +65,8 @@ def test_second_rows_are_light_in_the_strong_styles(monkeypatch, style, light):
 def test_background_names_keep_their_colors(monkeypatch, style):
     """Lake names stay blue and town names dimmed in every style: only the gray second rows turn light. The reference
     frames are too tolerant to see this, the names are small."""
-    monkeypatch.setitem(text.LABEL, "style", style)
-    monkeypatch.setitem(text.LABEL, "scale", 1.0)
     for color, blue in (((196, 226, 240, 235), True), ((236, 236, 230, 225), False)):     # a lake, a town (compose.py)
-        a = _rgba(text.text_sprite([("Laghi dei Piani", FONT, color, 30)], 1.0, "left", label=True))
+        a = _rgba(text.text_sprite([("Laghi dei Piani", FONT, color, 30)], 1.0, "left", label=text.LabelLook(style)))
         top = a[a[..., 3] > 200][..., :3]
         r, _, b = top[np.argsort(top.sum(-1))[-20:]].mean(0)               # the brightest pixels of the letters
         assert (b - r > 25) if blue else (b < r), f"{color}: letters drawn as {r:.0f} … {b:.0f}"
@@ -77,11 +74,9 @@ def test_background_names_keep_their_colors(monkeypatch, style):
 
 def test_the_strong_outline_grows_with_the_frame(monkeypatch):
     """The dark outline of strong labels is 1.7 units wide, so the labels look the same at every frame size."""
-    monkeypatch.setitem(text.LABEL, "style", "strong")
-    monkeypatch.setitem(text.LABEL, "scale", 1.0)
     for K in (1.0, 2.0):
         font = ImageFont.truetype(str(DATA / "cache" / "fonts" / "Figtree-600.ttf"), int(26 * K), layout_engine=ImageFont.Layout.BASIC)
-        got = _rgba(text.text_sprite([("Rifugio", font, WHITE, 30 * K)], K, "left", label=True))
+        got = _rgba(text.text_sprite([("Rifugio", font, WHITE, 30 * K)], K, "left", label=text.LabelLook("strong")))
         ref = Image.new("RGBA", (got.shape[1], got.shape[0]), (0, 0, 0, 0))
         ImageDraw.Draw(ref).text((0, 0), "Rifugio", font=font, fill=WHITE, stroke_width=round(1.7 * K), stroke_fill=(8, 10, 12, 255))
         dark = [int(((a[..., 3] == 255) & (np.abs(a[..., :3] - (8, 10, 12)).max(-1) <= 1)).sum()) for a in (got, np.asarray(ref, np.int16))]
@@ -96,7 +91,7 @@ def test_stop_badges_are_labels(tmp_path):
         from gpxfilm import cli, compose
         seen, draw = [], compose.text_sprite
         def text_sprite(rows, *a, **kw):
-            seen.append((rows[0][0], kw.get("label", False)))
+            seen.append((rows[0][0], kw.get("label") is not None))
             return draw(rows, *a, **kw)
         compose.text_sprite = text_sprite
         sys.argv = ["gpxfilm", *sys.argv[1:]]
