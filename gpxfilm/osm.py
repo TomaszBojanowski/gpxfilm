@@ -11,7 +11,8 @@ import numpy as np
 
 from .geo import Layout, Track
 from .i18n import _
-from .net import CACHE, http_get
+from .net import CACHE, http_get, store
+from .task import progress
 from .util import log
 
 LANG_BY_COUNTRY = {"IT": "it", "AT": "de", "DE": "de", "CH": "de", "LI": "de", "FR": "fr", "ES": "es", "PT": "pt", "PL": "pl", "CZ": "cs", "SK": "sk", "SI": "sl",
@@ -47,9 +48,9 @@ def overpass(q: str, message: str) -> dict | None:
     for srv in SERVERS:
         try:
             log(message.format(server=srv.split("/")[2]))
+            progress("osm")
             d = json.loads(http_get(srv, data=urllib.parse.urlencode({"data": q}).encode(), timeout=90, tries=2))
-            p.parent.mkdir(parents=True, exist_ok=True)
-            p.write_text(json.dumps(d))
+            store(p, json.dumps(d).encode())
             return d
         except Exception as e:  # noqa: BLE001
             log("  " + _("failed: {error}").format(error=e))
@@ -115,8 +116,7 @@ def country_info(tr: Track):
     try:
         p = CACHE / "ne_50m_admin_0_countries.geojson"
         if not p.exists():
-            p.parent.mkdir(parents=True, exist_ok=True)
-            p.write_bytes(http_get(NE_URL))
+            store(p, http_get(NE_URL))
         feat = find_country(json.loads(p.read_text(encoding="utf-8"))["features"], *(float(v) for v in tr.proj.inv(tr.cx[0], tr.cy[0])))[0]
         pr = feat["properties"]
         return pr.get("NAME_PL"), pr.get("NAME_EN"), pr.get("ISO_A2_EH") or pr.get("ISO_A2")
@@ -229,8 +229,7 @@ def place_name(lat: float, lon: float, lang: str):
     """Name of the town and the region from OpenStreetMap (Nominatim)."""
     p = CACHE / "geo" / f"{lat:.3f}_{lon:.3f}_{lang}.json"
     if not p.exists():
-        p.parent.mkdir(parents=True, exist_ok=True)
-        p.write_bytes(http_get(f"https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat={lat:.5f}&lon={lon:.5f}&zoom=12&accept-language={lang}"))
+        store(p, http_get(f"https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat={lat:.5f}&lon={lon:.5f}&zoom=12&accept-language={lang}"))
     a = json.loads(p.read_text(encoding="utf-8")).get("address", {})
     return (a.get("village") or a.get("town") or a.get("city") or a.get("municipality") or a.get("hamlet"),
             a.get("state") or a.get("county") or a.get("country"))

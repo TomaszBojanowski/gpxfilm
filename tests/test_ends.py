@@ -13,7 +13,7 @@ from gpxfilm.osm import end_place, end_places
 DATA = ROOT / "tests" / "data"
 SPY = textwrap.dedent("""
     import json, os, sys
-    from gpxfilm import cli, compose
+    from gpxfilm import cli, compose, engine
     force = os.environ.get("FORCE_END")
     if force:                                        # the ends take these places ("start|finish"), whatever is near them
         def end_places(cands, spots):
@@ -25,7 +25,7 @@ SPY = textwrap.dedent("""
         print("SCENE", json.dumps({"ends": sc.ends, "background": sc.background, "places": [c["name"] for c in sc.chosen],
                                    "peaks": sc.shown_peaks}, ensure_ascii=False))
         return sc
-    cli.compose_scene = compose_scene
+    engine.compose_scene = compose_scene
     sys.argv = ["gpxfilm", *sys.argv[1:]]
     cli.main()
 """)

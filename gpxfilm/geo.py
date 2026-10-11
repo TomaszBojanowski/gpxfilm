@@ -6,7 +6,6 @@ import datetime as dt
 import gzip
 import math
 import re
-import sys
 import xml.etree.ElementTree as ET
 import zlib
 from pathlib import Path
@@ -15,6 +14,7 @@ import numpy as np
 from scipy import ndimage as ndi
 
 from .i18n import _, ngettext, number, pgettext
+from .task import Failure
 from .util import log
 
 R_EARTH = 6378137.0
@@ -37,28 +37,28 @@ def gpx_root(path: Path):
     try:
         data = path.read_bytes()
     except OSError as e:
-        sys.exit(_("Cannot read the file {path}: {error}.").format(path=path, error=e.strerror or e))
+        raise Failure(_("Cannot read the file {path}: {error}.").format(path=path, error=e.strerror or e))
     for _layer in range(2):                     # .gpx.gz, e.g. from a Strava bulk export
         if data[:2] == b"\x1f\x8b":
             try:
                 data = gzip.decompress(data)
             except (OSError, EOFError, zlib.error):
-                sys.exit(_("The file {file} is a damaged gzip archive.").format(file=path.name))
+                raise Failure(_("The file {file} is a damaged gzip archive.").format(file=path.name))
     if data[:4] == b"PK\x03\x04":                  # binary signatures first: a FIT header may start with a form feed (12)
-        sys.exit(_("The file {file} is a ZIP archive (for example an export from Garmin Connect or a KMZ file). Unpack it and choose "
+        raise Failure(_("The file {file} is a ZIP archive (for example an export from Garmin Connect or a KMZ file). Unpack it and choose "
                    "the .gpx file.").format(file=path.name))
     if len(data) >= 12 and data[8:12] == b".FIT":
-        sys.exit(_("The file {file} is a FIT file straight from a watch or bike computer. The program reads only GPX: export the "
+        raise Failure(_("The file {file} is a FIT file straight from a watch or bike computer. The program reads only GPX: export the "
                    "activity as GPX (Garmin Connect, Strava and watch apps have this option).").format(file=path.name))
     if data[:3] == b"\xef\xbb\xbf":
         data = data[3:]
     data = data.lstrip(b" \t\r\n")
     if not data:
-        sys.exit(_("The file {file} is empty.").format(file=path.name))
+        raise Failure(_("The file {file} is empty.").format(file=path.name))
     try:
         root = ET.fromstring(data)
     except ET.ParseError as e:
-        sys.exit(_("The file {file} is not a valid GPX file: the XML is damaged or incomplete ({error}).").format(file=path.name, error=e))
+        raise Failure(_("The file {file} is not a valid GPX file: the XML is damaged or incomplete ({error}).").format(file=path.name, error=e))
     except (ValueError, LookupError):             # Shift_JIS, GBK and other encodings expat cannot read itself
         m = re.match(rb"<\?xml[^>]*encoding\s*=\s*[\"']([\w.:-]+)", data)
         enc = m[1].decode("ascii") if m else "?"
@@ -66,26 +66,26 @@ def gpx_root(path: Path):
             name = codecs.lookup(WIDER.get(enc.lower(), enc)).name
             text = data.decode(WIDER.get(name, name))
         except LookupError:
-            sys.exit(_("The file {file} uses a character encoding the program cannot read ({encoding}).").format(file=path.name, encoding=enc))
+            raise Failure(_("The file {file} uses a character encoding the program cannot read ({encoding}).").format(file=path.name, encoding=enc))
         except UnicodeError as e:
             if isinstance(e, UnicodeDecodeError) and e.end == len(data):     # cut off in the middle of a character
-                sys.exit(_("The file {file} is not a valid GPX file: the XML is damaged or incomplete (it ends in the middle of a "
+                raise Failure(_("The file {file} is not a valid GPX file: the XML is damaged or incomplete (it ends in the middle of a "
                            "character).").format(file=path.name))
-            sys.exit(_("The file {file} is not a valid GPX file: its characters do not match the encoding {encoding}.").format(
+            raise Failure(_("The file {file} is not a valid GPX file: its characters do not match the encoding {encoding}.").format(
                 file=path.name, encoding=enc))
         try:
             root = ET.fromstring(text)
         except (ET.ParseError, ValueError) as e:
-            sys.exit(_("The file {file} is not a valid GPX file: the XML is damaged or incomplete ({error}).").format(file=path.name, error=e))
+            raise Failure(_("The file {file} is not a valid GPX file: the XML is damaged or incomplete ({error}).").format(file=path.name, error=e))
     kind = _tag(root)
     if kind == "TrainingCenterDatabase":
-        sys.exit(_("The file {file} is a TCX file, not GPX. Export the activity as GPX (Garmin Connect, Polar Flow and COROS offer it "
+        raise Failure(_("The file {file} is a TCX file, not GPX. Export the activity as GPX (Garmin Connect, Polar Flow and COROS offer it "
                    "next to TCX).").format(file=path.name))
     if kind == "kml":
-        sys.exit(_("The file {file} is a KML file (for example from Google Earth), not GPX. Save or convert the route as GPX.").format(
+        raise Failure(_("The file {file} is a KML file (for example from Google Earth), not GPX. Save or convert the route as GPX.").format(
             file=path.name))
     if kind != "gpx":
-        sys.exit(_("The file {file} is not a GPX file (its root XML element is <{element}>).").format(file=path.name, element=kind))
+        raise Failure(_("The file {file} is not a GPX file (its root XML element is <{element}>).").format(file=path.name, element=kind))
     return root
 
 
@@ -391,7 +391,7 @@ def _pick_tracks(tracks: list, choice: int | None) -> tuple[list, str | None]:
 
     if choice is not None:
         if not 1 <= choice <= len(tracks):
-            sys.exit(_("There is no number {number}: {count} in the file.").format(number=choice, count=count))
+            raise Failure(_("There is no number {number}: {count} in the file.").format(number=choice, count=count))
         grp = [choice - 1]
         log((_("Drawing track {number}.") if trk else _("Drawing route {number}.")).format(number=choice))
     elif len(groups) == 1:
@@ -450,16 +450,16 @@ def read_gpx(path: Path, keep_times: bool = False, track: int | None = None) -> 
         log(_("Skipped points off the map (beyond {latitude}° north or south): {count}.").format(latitude=f"{MAX_LAT:.0f}", count=polar))
     if not found:
         if polar_trk and polar_trk >= bad_trk:
-            sys.exit(_("The track lies beyond {latitude}° north or south – the map does not reach that far.").format(latitude=f"{MAX_LAT:.0f}"))
+            raise Failure(_("The track lies beyond {latitude}° north or south – the map does not reach that far.").format(latitude=f"{MAX_LAT:.0f}"))
         if bad_trk:
-            sys.exit(_("No point of the track has valid coordinates – probably a workout without GPS (for example on a treadmill or "
+            raise Failure(_("No point of the track has valid coordinates – probably a workout without GPS (for example on a treadmill or "
                        "indoors)."))
         if any(_tag(e) == "trk" for e in root):
-            sys.exit(_("The track in the file has no GPS points – probably a workout without GPS (for example on a treadmill or "
+            raise Failure(_("The track in the file has no GPS points – probably a workout without GPS (for example on a treadmill or "
                        "indoors)."))
         if wpts:
-            sys.exit(_("The file has only single points (wpt), no track or route."))
-        sys.exit(_("The GPX file has no track (trkpt) or route (rtept)."))
+            raise Failure(_("The file has only single points (wpt), no track or route."))
+        raise Failure(_("The GPX file has no track (trkpt) or route (rtept)."))
     few = max(3, sum(q[3] is not None for tr in found for q in tr["pts"]) // 100)
     for tr in found:                            # broken times inside each track, then between the joined tracks
         tr["pts"] = [q[:3] + (tm,) + q[4:] for q, tm in zip(tr["pts"], _stray_times([q[3] for q in tr["pts"]], few))]
@@ -473,10 +473,10 @@ def read_gpx(path: Path, keep_times: bool = False, track: int | None = None) -> 
         log(_("Skipped position spikes (points far off the track): {count}.").format(count=len(spikes)))
         p = [q for i, q in enumerate(p) if i not in spikes]
     if len(p) < 2:
-        sys.exit(_("The file has only one track point – too few to draw a route."))
+        raise Failure(_("The file has only one track point – too few to draw a route."))
     lat, lon = [q[0] for q in p], [q[1] for q in p]
     if math.hypot(max(lat) - min(lat), (max(lon) - min(lon)) * math.cos(math.radians(lat[0]))) * 111320 < 20:
-        sys.exit(_("All track points lie in one place – there is no route to draw."))
+        raise Failure(_("All track points lie in one place – there is no route to draw."))
     p, ele_note = _clean_elevation(p)
     return dict(pts=p, wpts=wpts, name=name, ele_note=ele_note)
 
@@ -666,7 +666,7 @@ def prep_track(g: dict) -> Track:
     tr.lat, tr.lon, tr.t, tr.ci = lat, lon, t if tr.has_t else None, np.array(ci)   # for the elevation from the terrain model
     tr.rdist = float(tr.rd[-1])
     if len(tr.cx) < 2 or tr.dist < 1:              # the whole recording is one stop
-        sys.exit(_("There is no movement on the track – the whole recording is one stop, there is no route to draw."))
+        raise Failure(_("There is no movement on the track – the whole recording is one stop, there is no route to draw."))
     if g.get("ele_note"):
         log(_("The elevation in the file is not usable for the profile ({reason}) – taking it from the terrain model for the whole "
               "track.").format(reason=g["ele_note"]))

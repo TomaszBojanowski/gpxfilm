@@ -17,10 +17,10 @@ from .draw import MUTE, WHITE, Sprite, blit, shape_sprite, stroke_mask
 from .film import read_photo
 from .geo import BOX, LIMITS, Layout, Track, at_vertices, match_watch, smooth_climb
 from .i18n import N_, _
-from .net import CACHE, http_get
+from .net import CACHE, http_get, store
 from .osm import LANG_BY_COUNTRY, NE_URL, country_rings, end_places, find_country, find_pois, osm_geoms, pick_name
-from .terrain import LOOK
-from .text import NB, Fonts, Placer, text_sprite, wrap_name
+from .settings import Settings
+from .text import NB, Fonts, LabelLook, Placer, text_sprite, wrap_name
 from .util import clamp, km1, log
 
 
@@ -38,8 +38,7 @@ def mini_map(tr: Track, K: float, acc: tuple):
     """Small outline of the country with a marker of the place (design units: 128 x 128)."""
     p = CACHE / "ne_50m_admin_0_countries.geojson"
     if not p.exists():
-        p.parent.mkdir(parents=True, exist_ok=True)
-        p.write_bytes(http_get(NE_URL))
+        store(p, http_get(NE_URL))
     feats, P = json.loads(p.read_text(encoding="utf-8"))["features"], tr.proj
     feat, ring = find_country(feats, *(float(v) for v in P.inv(tr.cx[0], tr.cy[0])))
     if feat is None:
@@ -89,20 +88,22 @@ def live_speed(tr: Track, gd: np.ndarray) -> np.ndarray:
 NAMES = N_("Names: © OpenStreetMap")
 
 
-def frame_credit(language: str, default: str, names: bool = False) -> str:
-    """The credit of the map source in the frame, in the language of the film; default for the terrain drawing alone.
+def frame_credit(text: str | None, language: str, default: str, names: bool = False) -> str:
+    """The credit of the map source in the frame, in the language of the film: text as the background gives it, or default
+    for the terrain drawing alone.
     names: the film shows names from OpenStreetMap (places, peaks), which the credit then names when its source does not,
     as with aerial photos or a background of one's own."""
-    text = LOOK.get("credit")
     if text and names and "OpenStreetMap" not in text:
         text += "; " + NAMES
     return i18n.credit(text, i18n.translator(language)) if text else default
 
 
-def compose_scene(A, g: dict, tr: Track, lay: Layout, base: np.ndarray, D: np.ndarray, osm: dict, country, region, tz, L: dict,
-                  acc: tuple) -> SimpleNamespace:
-    """Draw the static layers onto base and prepare render(p), the frame with the route drawn up to fraction p."""
+def compose_scene(A: Settings, g: dict, tr: Track, lay: Layout, base: np.ndarray, D: np.ndarray, osm: dict, country, region, tz, L: dict,
+                  acc: tuple, credit: str | None = None) -> SimpleNamespace:
+    """Draw the static layers onto base and prepare render(p), the frame with the route drawn up to fraction p. credit is the
+    credit of the map background, when it is not the terrain drawing alone."""
     W, H, K = lay.W, lay.H, lay.K
+    lab = LabelLook(A.label_style, A.label_size)
     dxs, dys = lay.des(tr.cx, tr.cy)                  # route in design units
     if not tr.has_e:                                  # no elevation and no profile from the terrain model: the frame's model
         frame_elevation(tr, lay, D)
@@ -263,7 +264,7 @@ def compose_scene(A, g: dict, tr: Track, lay: Layout, base: np.ndarray, D: np.nd
     sp = text_sprite([((f"{nice}{NB}m" if nice < 1000 else num(nice / 1000, 0 if nice % 1000 == 0 else 1) + NB + "km"), fonts.get("reg", 20 * K), MUTE, 24 * K)], K)
     blit(base, sp, 1856 * K - sp.w, 950 * K)
     placer.rects.append((1856 - bw / K - 10, 944, 1860, 996))
-    credit = frame_credit(A.language, L["credit"], names=bool(osm.get("elements")))
+    credit = frame_credit(credit, A.language, L["credit"], names=bool(osm.get("elements")))
     sp = credit_sp = text_sprite([(credit, fonts.get("reg", 13 * K), (230, 233, 235, 170), 16 * K)], K)
     blit(base, sp, 1856 * K - sp.w, 1046 * K)
     if lut is not None:
@@ -318,7 +319,7 @@ def compose_scene(A, g: dict, tr: Track, lay: Layout, base: np.ndarray, D: np.nd
             def mk(align):
                 rows = [(l, fn26, WHITE, 30 * K) for l in name_lines]
                 rows += [(l, fn20, MUTE, 26 * K) for l in sublines if l]
-                return text_sprite(rows, K, align, label=True)
+                return text_sprite(rows, K, align, label=lab)
             return mk
 
         for vi, _word in ends:
@@ -381,7 +382,7 @@ def compose_scene(A, g: dict, tr: Track, lay: Layout, base: np.ndarray, D: np.nd
             pl.rects.append((qx - 12, qy - 4, qx + 12, qy + 22))
 
         def peak_label(pl_, qx, qy, c):               # peak label laid out by the given placer; None when it does not fit
-            mk = lambda align: text_sprite([(l, fonts.get("semi", 20 * K), WHITE, 24 * K) for l in wrap_name(c["name"])] + [(str(int(round(c["ele"]))), fn20, MUTE, 24 * K)], K, align, label=True)
+            mk = lambda align: text_sprite([(l, fonts.get("semi", 20 * K), WHITE, 24 * K) for l in wrap_name(c["name"])] + [(str(int(round(c["ele"]))), fn20, MUTE, 24 * K)], K, align, label=lab)
             probe = mk("center")
             res = (pl_.place(qx, qy + 9, probe.w / K, probe.h / K, ("S", "N"), min_gap=8, dists=(16, 24), relaxes=(1.0,))
                    or pl_.place(qx, qy + 9, probe.w / K, probe.h / K, ("E", "W"), min_gap=8, dists=(16, 24), relaxes=(1.0,)))   # beside the mark when it fits nowhere else
@@ -419,7 +420,7 @@ def compose_scene(A, g: dict, tr: Track, lay: Layout, base: np.ndarray, D: np.nd
                 qx, qy = (float(v) for v in lay.des(x_, y_))
                 if nm in seen or len(background) >= 8 or not (LIMITS[0] < qx < LIMITS[2] and LIMITS[1] < qy < LIMITS[3]):
                     continue
-                mk = lambda align, nm=nm, col=col: text_sprite([(l, fonts.get("reg", 17 * K), col, 21 * K) for l in wrap_name(nm, 16)], K, align, label=True)
+                mk = lambda align, nm=nm, col=col: text_sprite([(l, fonts.get("reg", 17 * K), col, 21 * K) for l in wrap_name(nm, 16)], K, align, label=lab)
                 probe = mk("center")
                 res = pl.place(qx, qy, probe.w / K, probe.h / K, ("S", "N", "E", "W"), min_gap=8, dists=(3, 14, 26), relaxes=(1.0,))
                 if res:
@@ -497,7 +498,7 @@ def compose_scene(A, g: dict, tr: Track, lay: Layout, base: np.ndarray, D: np.nd
             dur = float(tr.tout[v] - tr.tin[v])
             if dur < A.stop_minutes * 60:
                 continue
-            sp_ = text_sprite([(f"{L['stop']} {int(round(dur / 60))}{NB}min", fonts.get("semi", 22 * K), WHITE, 28 * K)], K, label=True)
+            sp_ = text_sprite([(f"{L['stop']} {int(round(dur / 60))}{NB}min", fonts.get("semi", 22 * K), WHITE, 28 * K)], K, label=lab)
             res = placer.place(dxs[v], dys[v], sp_.w / K, sp_.h / K, dists=(26, 40, 58, 80), min_gap=9)
             badges[v] = (sp_, res[0][0] * K, res[0][1] * K) if res else (sp_, dxs[v] * K - sp_.w / 2, (dys[v] - 62) * K)
             events.append((float(vfr[v]), 0, "stop", v))

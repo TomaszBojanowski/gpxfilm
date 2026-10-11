@@ -1,16 +1,17 @@
 """Downloads and the cache directory."""
 from __future__ import annotations
 
+import contextlib
 import os
 import ssl
 import sys
-import time
 import urllib.error
 import urllib.parse
 import urllib.request
 from pathlib import Path
 
 from . import __version__
+from .task import rest
 
 PROJECT_URL = "https://github.com/TomaszBojanowski/gpxfilm"
 UA = f"gpxfilm/{__version__} (+{PROJECT_URL})"     # how the program introduces itself to every server it asks
@@ -44,6 +45,25 @@ def cache_dir(base: Path, name: str, old: str) -> Path:
     return p
 
 
+@contextlib.contextmanager
+def whole(path: Path):
+    """Write a file of the cache in one step: the block writes to the temporary path it gets, and only a finished file
+    takes the name path. The process may be ended at any moment, and a file cut short must never stay in the cache."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_name(f"{path.name}.{os.getpid()}.part")
+    try:
+        yield tmp
+        os.replace(tmp, path)
+    finally:
+        tmp.unlink(missing_ok=True)
+
+
+def store(path: Path, data: bytes) -> None:
+    """Put data in the cache under path, whole or not at all."""
+    with whole(path) as tmp:
+        tmp.write_bytes(data)
+
+
 def http_get(url: str, data: bytes | None = None, timeout: int = 60, tries: int = 3) -> bytes:
     """The body of a GET (or, with data, a POST) to url, with the User-Agent of the program; every download goes through here."""
     err: Exception | None = None
@@ -74,5 +94,5 @@ def http_get(url: str, data: bytes | None = None, timeout: int = 60, tries: int 
         except Exception as e:  # noqa: BLE001 – the network can be flaky, try again
             err = e
         if k + 1 < tries:
-            time.sleep(1.5 * (k + 1))
+            rest(1.5 * (k + 1))
     raise err  # type: ignore[misc]

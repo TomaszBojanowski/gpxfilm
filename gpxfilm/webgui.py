@@ -44,6 +44,12 @@ class Messages:
             return {"log": list(self.lines), "n": self.total}
 
 
+def proposed_output(gpx: str, output: str) -> bool:
+    """Whether output is the film name the window itself proposes for the track gpx: next to a chosen file, in the home
+    directory for a file dropped on the window. Such a name belongs to that track and is not kept for the next one."""
+    return bool(gpx and output) and Path(output) in (Path(gpx).with_suffix(".mp4"), Path.home() / (Path(gpx).stem + ".mp4"))
+
+
 def localize(page: str, t: Translator) -> str:
     """The window page in the language of t: ⟦text⟧ marks a text of the HTML, ⟪text⟫ the inside of a JavaScript string."""
     page = re.sub(r"⟦(.*?)⟧", lambda m: html.escape(t.gettext(m[1])), page, flags=re.S)
@@ -182,6 +188,7 @@ pre{margin:0;background:var(--field);border:1px solid var(--line);border-radius:
     <label for="output">⟦Film file⟧</label><input type="text" id="output" placeholder="⟦by default next to the GPX track⟧">
     <label for="slides">⟦Folder for slide frames⟧</label>
     <div class="row"><input type="text" id="slides" placeholder="⟦empty = no frames⟧"><button data-pick="slides" data-kind="dir">⟦Choose…⟧</button></div>
+    <label for="codec">⟦Codec⟧</label><select id="codec"><option value="h264">⟦compatible (H.264)⟧</option><option value="hevc">⟦smaller file (HEVC)⟧</option></select>
     <div class="row">
       <div><label for="crf">⟦Quality (CRF, lower = better)⟧</label><input type="number" id="crf" min="0" max="40" step="1"></div>
       <div><label for="encoder">⟦ffmpeg encoder⟧</label><input type="text" id="encoder" placeholder="⟦automatic⟧"></div>
@@ -202,12 +209,21 @@ pre{margin:0;background:var(--field);border:1px solid var(--line);border-radius:
 <script>
 const K=new URLSearchParams(location.search).get('k'),INIT=__INIT__,$=id=>document.getElementById(id);
 const VALS=['gpx','title','subtitle','map','map_url','map_style','color','color_by','size','fps','route_duration','intro_duration','intro_label_duration','intro_peaks','intro_places','intro_radius','outro_duration','stop_minutes','music','photos','photo_duration','photo_limit','photo_offset',
-  'places','peaks','language','name_language','timezone','label_style','label_size','label_file','skip','rename','font','logo','output','slides','crf','encoder','track','distance','ascent'];
+  'places','peaks','language','name_language','timezone','label_style','label_size','label_file','skip','rename','font','logo','output','slides','codec','crf','encoder','track','distance','ascent'];
 const FLAGS=['auto_title','sunlight','minimap','background_names','km_markers','counters','no_heart_rate','intro','outro','no_osm','keep_times'];
-const STILL_SAME=['output','slides','music','crf','encoder','fps','size'];   // fields that do not change the preview
+const STILL_SAME=['output','slides','music','codec','crf','encoder','fps','size'];   // fields that do not change the preview
 if(INIT.map&&/\{z\}|\{bbox\}/.test(String(INIT.map))){INIT.map_url=INIT.map;INIT.map='custom';}
 for(const k of VALS){const v=INIT[k];if(v!=null&&v!=='')$(k).value=k==='title'?String(v).replaceAll('\\n','\n'):v;}
 for(const k of FLAGS)$(k).checked=!!INIT[k];
+if(INIT.codecs.length){                                // a codec this ffmpeg cannot make is not offered
+  for(const op of $('codec').options)if(!INIT.codecs.includes(op.value)){op.disabled=true;op.textContent+=' – ⟪this ffmpeg cannot make it⟫';}
+  if($('codec').selectedOptions[0].disabled)$('codec').value=INIT.codecs[0];
+}
+const filmName=p=>p.replace(/\.[^.\/]+$/,'')+'.mp4';   // the film next to its track
+function propose(p,out){                               // a new track: its film name, unless the user typed a name of their own
+  if(p&&(!$('output').value||$('output').dataset.auto)){$('output').value=out||filmName(p);$('output').dataset.auto='1';}
+}
+propose($('gpx').value.trim());
 const opts=()=>{const o={};for(const k of VALS)o[k]=$(k).value.trim();for(const k of FLAGS)o[k]=$(k).checked;
   if(o.map==='custom')o.map=o.map_url;delete o.map_url;return o;};
 const urlbox=()=>{$('urlbox').hidden=$('map').value!=='custom';};
@@ -219,9 +235,10 @@ const mmss=s=>Math.floor(s/60)+':'+String(Math.round(s%60)).padStart(2,'0');
 document.querySelectorAll('button[data-pick]').forEach(b=>{b.onclick=async()=>{const r=await post('/pick',null,'&kind='+b.dataset.kind+'&field='+b.dataset.pick);if(r.path){$(b.dataset.pick).value=r.path;changed(b.dataset.pick);}else say('⟪Type the path by hand.⟫');};});
 const forget=()=>{for(const k of ['track','distance','ascent'])$(k).value='';$('keep_times').checked=false;};   // these belong to one file
 $('gpx').addEventListener('input',forget);
+$('gpx').addEventListener('change',()=>propose($('gpx').value.trim()));   // a path typed by hand
 function setGpx(p,out){
   $('gpx').value=p;forget();
-  if(!$('output').value||$('output').dataset.auto){$('output').value=out||p.replace(/\.[^.\/]+$/,'')+'.mp4';$('output').dataset.auto='1';}
+  propose(p,out);
   preview();
 }
 $('output').addEventListener('input',()=>{delete $('output').dataset.auto;});
@@ -287,7 +304,8 @@ async function preview(){
   if(!$('gpx').value.trim()){say('⟪Choose a GPX track first.⟫');return;}
   busy=true;$('prev').disabled=true;say('⟪Drawing the preview…⟫');
   try{
-    const r=await post('/preview',JSON.stringify(opts()));
+    const st=document.querySelector('.stage'),px=devicePixelRatio||1;   // the frame comes as large as it is shown
+    const r=await post('/preview',JSON.stringify({...opts(),box:[Math.round(st.clientWidth*px),Math.round(st.clientHeight*px)]}));
     if(r.ok){$('vid').pause();$('vid').hidden=true;$('img').src='/preview.png?k='+K+'&t='+Date.now();$('img').style.display='block';$('hint').style.display='none';report(r.report);}
     const lines=r.log.trim()?r.log.trim().split('\n'):[];
     if(timer){                                       // a film is being made: its messages stay in the box
@@ -315,7 +333,7 @@ async function poll(){
   if(s.running)say(fmt(s.draft?'⟪Preparing the film preview… {pct}%⟫':'⟪Rendering the film… {pct}%⟫',{pct:s.pct}));
   if(s.done){
     clearInterval(timer);timer=null;$('go').disabled=$('draft').disabled=false;$('stop').hidden=true;
-    if(!s.ok){say('⟪Rendering failed. Details below.⟫');return;}
+    if(!s.ok){say(s.stopped?'⟪Stopped.⟫':'⟪Rendering failed. Details below.⟫');return;}
     if(s.draft){const v=$('vid');v.src='/draft.mp4?k='+K+'&t='+Date.now();v.hidden=false;$('img').style.display='none';$('hint').style.display='none';v.play().catch(()=>{});say('⟪Film preview ready (720p draft).⟫');}
     else{say(fmt('⟪Done: {file}⟫',{file:s.out}));$('show').hidden=false;}
   }
@@ -335,17 +353,26 @@ def run_gui(A, defaults: dict) -> None:
     import webbrowser
     from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
+    import queue
+
+    from .cli import options
+    from .film import codecs_of, known_encoders
+    from .settings import Settings
+    from .task import Failure, Message, Task, running
+    from .worker import Worker
+
     token, tmp = secrets.token_urlsafe(12), Path(tempfile.mkdtemp(prefix="gpxfilm-"))
-    script = [sys.executable, "-m", "gpxfilm"]        # the same program, also when it runs from a source checkout
     env = dict(os.environ, PYTHONPATH=os.pathsep.join(filter(None, [str(Path(__file__).resolve().parent.parent), os.environ.get("PYTHONPATH")])))
-    state = dict(running=False, done=False, ok=False, pct=0, out="", msgs=Messages(), proc=None, draft=False)
+    state = dict(running=False, done=False, ok=False, stopped=False, pct=0, out="", msgs=Messages(), proc=None, draft=False,
+                 stopping=None)                       # stopping: the worker that was asked to stop
+    still = dict(worker=None, events=queue.Queue(), msgs=Messages(), lock=threading.Lock())   # the worker of the previews, kept between them
     memo = CACHE / "gui.json"                         # the window's last used settings
     VALS = [("title", "--title"), ("subtitle", "--subtitle"), ("size", "--size"), ("fps", "--fps"), ("route_duration", "--route-duration"), ("color", "--color"),
             ("map", "--map"), ("map_style", "--map-style"), ("color_by", "--color-by"), ("intro_duration", "--intro-duration"), ("photos", "--photos"),
             ("intro_label_duration", "--intro-label-duration"), ("intro_peaks", "--intro-peaks"), ("intro_places", "--intro-places"), ("intro_radius", "--intro-radius"),
             ("photo_duration", "--photo-duration"), ("photo_limit", "--photo-limit"), ("name_language", "--name-language"), ("timezone", "--timezone"), ("places", "--places"),
             ("peaks", "--peaks"), ("language", "--language"), ("label_style", "--label-style"), ("label_size", "--label-size"), ("photo_offset", "--photo-offset"), ("stop_minutes", "--stop-minutes"), ("label_file", "--label-file"),
-            ("font", "--font"), ("logo", "--logo"), ("outro_duration", "--outro-duration"), ("crf", "--crf"), ("encoder", "--encoder"),
+            ("font", "--font"), ("logo", "--logo"), ("outro_duration", "--outro-duration"), ("codec", "--codec"), ("crf", "--crf"), ("encoder", "--encoder"),
             ("music", "--music"), ("slides", "--slides"), ("track", "--track"),
             ("distance", "--distance"), ("ascent", "--ascent")]
     FLAGS = ["intro", "outro", "counters", "no_heart_rate", "km_markers", "minimap", "background_names", "sunlight", "auto_title", "no_osm", "keep_times"]
@@ -354,11 +381,17 @@ def run_gui(A, defaults: dict) -> None:
     conv = lambda v: str(v) if isinstance(v, Path) else "\n".join(v) if isinstance(v, list) else v
     init = {k: conv(v) for k, v in vars(A).items() if k in keys}
     try:                                              # remembered settings come back unless the command gives them now
-        for k, v in upgrade(json.loads(memo.read_text(encoding="utf-8")))[0].items():   # also settings remembered under the old names
+        kept = upgrade(json.loads(memo.read_text(encoding="utf-8")))[0]   # also settings remembered under the old names
+        if proposed_output(str(kept.get("gpx") or ""), str(kept.get("output") or "")):
+            del kept["output"]                        # the page proposes the name again, for the track it opens with
+        for k, v in kept.items():
             if k in keys - ONE_FILE and conv(vars(A).get(k)) == conv(defaults.get(k)) and not (k in ("gpx", "photos", "label_file", "font", "logo", "music") and v and not Path(v).exists()):
                 init[k] = v
     except Exception:  # noqa: BLE001
         pass
+
+    ffmpeg = shutil.which("ffmpeg")
+    codecs = codecs_of(known_encoders(ffmpeg)) if ffmpeg else []   # what the page offers; none: it offers all, and the film says what is missing
 
     def remember(o: dict) -> None:
         try:
@@ -371,6 +404,8 @@ def run_gui(A, defaults: dict) -> None:
         a = [str(o.get("gpx", ""))]
         for key, flag in VALS:
             if key == "track" and not str(o.get(key) or "").isdecimal():   # empty, or a half-typed number
+                continue
+            if key == "codec" and o.get(key) == "h264":   # the default is not asked for: an encoder given by name may make another codec, as before
                 continue
             if o.get(key) not in (None, "", False) and not (preview and key in ("music", "slides")) and not (draft and key == "slides"):
                 a += [flag, str(o[key])]
@@ -394,14 +429,81 @@ def run_gui(A, defaults: dict) -> None:
         except Exception:  # noqa: BLE001 – without a chooser the path is typed by hand
             return ""
 
-    def worker(args: list[str], msgs: Messages) -> None:   # the film is made by the same command as in the terminal
-        p = subprocess.Popen([*script, *args], stderr=subprocess.PIPE, text=True, env=env)
-        state["proc"] = p
-        for line in p.stderr:
-            msgs.add(line)
-            state["pct"] = msgs.pct
-        p.wait()
-        state.update(running=False, done=True, ok=p.returncode == 0, pct=100 if p.returncode == 0 else state["pct"], proc=None)
+    def tell(msgs: Messages, text: str) -> None:
+        for line in text.splitlines():
+            msgs.add(line + "\n")
+
+    def read(args: list[str], msgs: Messages):        # the form as the options of the command; what reading them says goes to msgs
+        try:
+            with running(Task(lambda event: isinstance(event, Message) and tell(msgs, event.text))):
+                return options(args, raising=True)[0]
+        except Failure as e:
+            tell(msgs, str(e))
+            return None
+
+    def follow(events, id: int, msgs: Messages, each=None) -> dict:   # the events of a job up to its last, which is returned
+        while True:
+            e = events.get()
+            if e["event"] == "gone":
+                return e
+            if e.get("id") != id:
+                continue
+            if e["event"] == "message":
+                tell(msgs, e["text"])
+            elif e["event"] in ("done", "cancelled", "busy"):
+                return e
+            elif e["event"] == "failed":
+                tell(msgs, e.get("trace") or e["text"])
+                return e
+            elif each:
+                each(e)
+
+    def still_frame(o: dict, msgs: Messages) -> tuple[bool, dict | None]:   # a preview: (it worked, the report of the film)
+        A = read(build(o, True), msgs)
+        if A is None:
+            return False, None
+        try:
+            w, h = (max(16, int(v)) for v in o.get("box") or ())
+        except (TypeError, ValueError):
+            w, h = 1280, 720                           # a page that did not say how large its preview is
+        with still["lock"]:
+            still["msgs"] = msgs
+            if still["worker"] is None or not still["worker"].alive():
+                still["events"] = queue.Queue()
+                still["worker"] = Worker(still["events"].put, env=env, on_error=lambda line: still["msgs"].add(line))
+            got = {}
+            id = still["worker"].request("preview", settings=Settings.from_options(A).to_dict(), width=w, height=h,
+                                         file=str(tmp / "preview.png"), report=True)
+            end = follow(still["events"], id, msgs, lambda e: e["event"] == "report" and got.update(e["report"]))
+            return end["event"] == "done", got or None
+
+    def film(args: list[str], out: str, msgs: Messages) -> None:   # the film is made as by the command in the terminal, in a process of its own
+        def progress(e: dict) -> None:
+            if e["event"] == "progress" and e["stage"] == "frames" and e["total"]:
+                state["pct"] = 100 * e["done"] // e["total"]
+
+        ok = stopped = False
+        try:
+            A = read(args, msgs)
+            if A is not None:
+                events = queue.Queue()
+                state["proc"] = w = Worker(events.put, env=env, on_error=msgs.add)
+                id = w.request("export", settings=Settings.from_options(A).to_dict(), output=out, slides=str(A.slides) if A.slides else None)
+                end = follow(events, id, msgs, progress)["event"]
+                ok = end == "done"
+                stopped = end == "cancelled" or (end == "gone" and state["stopping"] is w)   # stopped by the user: not a failure
+                if stopped:
+                    tell(msgs, _("Rendering stopped."))
+                w.close()
+        finally:
+            state.update(running=False, done=True, ok=ok, stopped=stopped, pct=100 if ok else state["pct"], proc=None)
+
+    def stop() -> None:                               # the film stops and cleans up; one that waits for a server is ended
+        w = state["proc"]
+        if w:
+            state["stopping"] = w
+            w.request("cancel")
+            threading.Timer(1.0, lambda: w.alive() and w.kill()).start()
 
     class Handler(BaseHTTPRequestHandler):
         def log_message(self, *a):                    # no line in the terminal for every request
@@ -428,12 +530,12 @@ def run_gui(A, defaults: dict) -> None:
             if path == "/":
                 t = ui()
                 page = localize(GUI_PAGE, t).replace("__LANG__", t.language)
-                page = page.replace("__INIT__", json.dumps(init | {"decimal": t.pgettext(*DECIMAL)}))
+                page = page.replace("__INIT__", json.dumps(init | {"decimal": t.pgettext(*DECIMAL), "codecs": codecs}))
                 return self.reply(page.encode(), "text/html; charset=utf-8")
             if path == "/preview.png" and (tmp / "preview.png").exists():
                 return self.reply((tmp / "preview.png").read_bytes(), "image/png")
             if path == "/status":
-                return self.reply({k: state[k] for k in ("running", "done", "ok", "pct", "out", "draft")} | state["msgs"].tail())
+                return self.reply({k: state[k] for k in ("running", "done", "ok", "stopped", "pct", "out", "draft")} | state["msgs"].tail())
             if path == "/draft.mp4" and (tmp / "draft.mp4").exists():      # the browser's player asks for parts of the file
                 data, m = (tmp / "draft.mp4").read_bytes(), re.match(r"bytes=(\d*)-(\d*)", self.headers.get("Range") or "")
                 if not m:
@@ -462,14 +564,9 @@ def run_gui(A, defaults: dict) -> None:
             o = json.loads(raw or b"{}")
             if path == "/preview":
                 remember(o)
-                rp = tmp / "report.json"
-                rp.unlink(missing_ok=True)
-                r = subprocess.run([*script, *build(o, True), "--frame-only", str(tmp / "preview.png"), "--size", "1280x720", "--report", str(rp)], capture_output=True, text=True, env=env)
-                rep_ = json.loads(rp.read_text(encoding="utf-8")) if r.returncode == 0 and rp.exists() else None
                 msgs = Messages()
-                for line in r.stderr.splitlines():
-                    msgs.add(line)
-                return self.reply({"ok": r.returncode == 0, "log": "\n".join(msgs.tail()["log"]), "cmd": "python -m gpxfilm " + shlex.join(build(o)), "report": rep_})
+                ok, rep_ = still_frame(o, msgs)
+                return self.reply({"ok": ok, "log": "\n".join(msgs.tail()["log"]), "cmd": "python -m gpxfilm " + shlex.join(build(o)), "report": rep_})
             if path == "/render":
                 if state["running"]:
                     return self.reply({"ok": False, "log": _("A film is already being rendered.")})
@@ -478,12 +575,11 @@ def run_gui(A, defaults: dict) -> None:
                 out = str(tmp / "draft.mp4") if draft else o.get("output") or str(Path(o.get("gpx") or "film").with_suffix(".mp4"))
                 args = build(o, draft=draft) + (["--draft"] if draft else []) + ["-o", out]
                 msgs = Messages()                     # the new job is running before the reply, so no poll sees the old one as done
-                state.update(running=True, done=False, ok=False, pct=0, out=out, msgs=msgs, draft=draft)
-                threading.Thread(target=worker, args=(args, msgs), daemon=True).start()
+                state.update(running=True, done=False, ok=False, stopped=False, pct=0, out=out, msgs=msgs, draft=draft)
+                threading.Thread(target=film, args=(args, out, msgs), daemon=True).start()
                 return self.reply({"ok": True, "out": out, "cmd": "python -m gpxfilm " + shlex.join(args)})
             if path == "/cancel":
-                if state["proc"]:
-                    state["proc"].terminate()
+                stop()
                 return self.reply({"ok": True})
             if path == "/open":
                 tgt = Path(o.get("path", ""))
@@ -504,4 +600,7 @@ def run_gui(A, defaults: dict) -> None:
     except KeyboardInterrupt:
         pass
     finally:
+        for w in (state["proc"], still["worker"]):
+            if w:
+                w.kill()
         shutil.rmtree(tmp, ignore_errors=True)

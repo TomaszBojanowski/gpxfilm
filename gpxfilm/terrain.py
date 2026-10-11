@@ -4,8 +4,8 @@ from __future__ import annotations
 import hashlib
 import http.client
 import math
-import time
 import urllib.error
+from dataclasses import dataclass, replace
 
 import numpy as np
 from PIL import Image, ImageDraw
@@ -13,22 +13,35 @@ from scipy import ndimage as ndi
 
 from .geo import R_EARTH, Layout, Proj, Track, at_vertices, smooth_climb
 from .i18n import _, ngettext
-from .net import CACHE, cache_dir, http_get
+from .net import CACHE, cache_dir, http_get, store, whole
 from .osm import osm_geoms
 from .sources import MAPS, SENTINEL, TERRAIN
+from .task import check, progress, rest
 from .tiles import SourceDown, raster_map
 from .util import clamp, log, to_u8
 
-LOOK = {"style": "natural", "light": (315.0, 42.0), "map": "terrain"}   # look of the map: color style, light direction, kind of background
+
+@dataclass(frozen=True)
+class Look:
+    """The look of the map: its color style, the direction of the light (azimuth and altitude in degrees), the kind of
+    background and the sources of its tiles, each (address, deepest zoom, credit). relief gives it back as drawn: with the
+    credit of the background, and with satellite imagery where there were no aerial photos."""
+    style: str = "natural"
+    light: tuple = (315.0, 42.0)
+    map: str = "terrain"
+    sources: tuple = ()
+    credit: str | None = None
+
+
 VERSION = 15                             # a change in how the map is drawn makes stored backgrounds stale
 
 
 def dem_tile(z: int, x: int, y: int, tries: int = 3) -> np.ndarray:
+    check()
     p = CACHE / "dem" / str(z) / str(x) / f"{y}.webp"
     if not p.exists():
-        p.parent.mkdir(parents=True, exist_ok=True)
-        p.write_bytes(http_get(f"https://tiles.mapterhorn.com/{z}/{x}/{y}.webp", timeout=60 if tries > 1 else 20, tries=tries))
-        time.sleep(0.05)
+        store(p, http_get(f"https://tiles.mapterhorn.com/{z}/{x}/{y}.webp", timeout=60 if tries > 1 else 20, tries=tries))
+        rest(0.05)
     a = np.asarray(Image.open(p).convert("RGB")).astype(np.float32)
     return a[..., 0] * 256 + a[..., 1] + a[..., 2] / 256 - 32768
 
@@ -110,6 +123,7 @@ def load_dem(pr: Proj, lay: Layout, quiet: bool = False) -> np.ndarray:
             mos = np.zeros(((ty1 - ty0 + 1) * TS, (tx1 - tx0 + 1) * TS), np.float32)
             for tx in range(tx0, tx1 + 1):
                 for ty in range(ty0, ty1 + 1):
+                    progress("terrain", (tx - tx0) * (ty1 - ty0 + 1) + ty - ty0, cnt)
                     mos[(ty - ty0) * TS:(ty - ty0 + 1) * TS, (tx - tx0) * TS:(tx - tx0 + 1) * TS] = dem_tile(z, tx % n, min(max(ty, 0), n - 1))
             break
         except urllib.error.HTTPError:
@@ -127,22 +141,21 @@ def load_dem(pr: Proj, lay: Layout, quiet: bool = False) -> np.ndarray:
     return top * (1 - fv) + bot * fv
 
 
-def relief(proj: Proj, lay: Layout, osm: dict, contours: bool = True, quiet: bool = False, tiles: bool = False):
-    """Shaded terrain map of the frame (image 0..1) and the elevation model at the pixels of the frame."""
+def relief(proj: Proj, lay: Layout, osm: dict, look: Look, contours: bool = True, quiet: bool = False, tiles: bool = False):
+    """Shaded terrain map of the frame (image 0..1), the elevation model at the pixels of the frame, and the look as drawn."""
     W, H, K, mpp = lay.W, lay.H, lay.K, lay.mpp
     cache = None
     if lay.W <= 1280:                                 # small frames (preview, draft) are stored on disk: the next preview is quick
         sig = repr((VERSION, lay.W, lay.H, round(lay.S, 9), round(lay.ox, 3), round(lay.oy, 3), round(proj.lat0, 7), round(proj.lon0, 7),
-                    sorted((k_, v_) for k_, v_ in LOOK.items() if k_ != "credit"), contours, tiles, len(osm.get("elements", []))))
+                    [("light", look.light), ("map", look.map), ("sources", look.sources), ("style", look.style)], contours, tiles, len(osm.get("elements", []))))
         cache = cache_dir(CACHE, "backgrounds", "tla") / (hashlib.sha1(sig.encode()).hexdigest() + ".npz")
         if cache.exists():
             try:
                 z = np.load(cache)
-                if str(z["credit"]):
-                    LOOK["credit"] = str(z["credit"])
-                return z["img"].astype(np.float32) / 255, z["D"]
+                return z["img"].astype(np.float32) / 255, z["D"], replace(look, credit=str(z["credit"]) or look.credit)
             except Exception:  # noqa: BLE001 – a damaged file is simply computed again
                 pass
+    progress("background")
     D0 = load_dem(proj, lay, quiet)
     gs = lambda a, m: ndi.gaussian_filter(a, max(m / mpp, 0.6))
     # variable smoothing: detail where the data has it, smooth where grid artifacts show
@@ -159,7 +172,7 @@ def relief(proj: Proj, lay: Layout, osm: dict, contours: bool = True, quiet: boo
         a, b = math.radians(az), math.radians(alt)
         return np.clip((-gx * zf * math.sin(a) * math.cos(b) + gy * zf * math.cos(a) * math.cos(b) + math.sin(b)) / nrm, 0, 1)
 
-    az_, alt_ = LOOK["light"]                         # the main light and two weaker fill lights
+    az_, alt_ = look.light                         # the main light and two weaker fill lights
     lights = [(az_, alt_, 0.58), (az_ - 45, max(alt_ - 8, 12), 0.24), (az_ + 45, min(alt_ + 10, 75), 0.18)]
     hs = sum(w_ * shade(a_, b_) for a_, b_, w_ in lights)
     flat = sum(w_ * math.sin(math.radians(b_)) for _, b_, w_ in lights)
@@ -193,7 +206,7 @@ def relief(proj: Proj, lay: Layout, osm: dict, contours: bool = True, quiet: boo
     del ca, gp
     sea = ((D0 <= 0.3) & (g < 1e-3))[..., None]       # sea and large water bodies in the elevation data
     img = np.where(sea, np.array([0.20, 0.38, 0.47], np.float32), img)
-    ready = tiles and LOOK["map"] != "terrain"         # a ready background from tiles instead of our own terrain drawing
+    ready = tiles and look.map != "terrain"         # a ready background from tiles instead of our own terrain drawing
     complete = True                                   # a background from incomplete tiles is not stored: next time they may come
 
     def fetch(sources):
@@ -207,23 +220,23 @@ def relief(proj: Proj, lay: Layout, osm: dict, contours: bool = True, quiet: boo
         return got_
 
     if ready:
-        got = fetch(LOOK["sources"])
-        if not isinstance(got, tuple) and LOOK["map"] == "aerial":   # aerial photos missing: satellite for the whole frame
+        got = fetch(look.sources)
+        if not isinstance(got, tuple) and look.map == "aerial":   # aerial photos missing: satellite for the whole frame
             log(_("Aerial photos do not cover this place – using Sentinel-2 satellite imagery.") if got is None else
                 _("Aerial photos: {error} – using Sentinel-2 satellite imagery for the whole frame.").format(error=got))
-            LOOK["map"], LOOK["sources"] = "satellite", (MAPS["satellite"],)
-            got = fetch(LOOK["sources"])
+            look = replace(look, map="satellite", sources=(MAPS["satellite"],))
+            got = fetch(look.sources)
         if not isinstance(got, tuple):
             if got is not None:
                 log(_("Map background: {error}.").format(error=got))
             log(_("Could not download the map background – keeping the terrain map."))
             ready = False
         else:
-            ras, hole, LOOK["credit"] = got[0], got[1], got[3]
+            ras, hole, credit = got[0], got[1], got[3]
             fill = TERRAIN                            # what shows through the gaps: the terrain drawing or satellite imagery
-            if LOOK["map"] == "satellite":            # satellite imagery gets relief shading
+            if look.map == "satellite":               # satellite imagery gets relief shading
                 ras = np.clip(ras * lum[..., None] * 1.14, 0, 1)
-            elif LOOK["map"] == "aerial":              # aerial photos have their own shadows: only slight dimming under the text
+            elif look.map == "aerial":                 # aerial photos have their own shadows: only slight dimming under the text
                 ras = ras * (0.76 + 0.16 * lum[..., None])
                 if hole is not None:                  # bits outside the aerial photo coverage are patched with satellite imagery, not the drawing
                     sat = fetch((MAPS["satellite"],))
@@ -233,15 +246,16 @@ def relief(proj: Proj, lay: Layout, osm: dict, contours: bool = True, quiet: boo
                         fill = SENTINEL if sat[1] is None or float((sat[1] * hole).mean()) < 0.001 else f"{SENTINEL}; {TERRAIN}"
             else:
                 ras = ras * 0.80
-            if hole is not None and fill not in LOOK["credit"]:
-                LOOK["credit"] += "; " + fill
+            if hole is not None and fill not in credit:
+                credit += "; " + fill
+            look = replace(look, credit=credit)
             img = ras if hole is None else ras * (1 - hole[..., None]) + img * hole[..., None]
     del lum
     # trails and roads, and water from OpenStreetMap, drawn at double resolution
     ss = 2
     lm = Image.new("L", (W * ss, H * ss), 0); ld = ImageDraw.Draw(lm)
     wm_ = Image.new("L", (W * ss, H * ss), 0); wd = ImageDraw.Draw(wm_)
-    for e in (osm.get("elements", []) if not ready or LOOK["map"] == "satellite" else []):
+    for e in (osm.get("elements", []) if not ready or look.map == "satellite" else []):
         tg = e.get("tags", {})
         if e["type"] == "node":
             continue
@@ -259,19 +273,19 @@ def relief(proj: Proj, lay: Layout, osm: dict, contours: bool = True, quiet: boo
     del la, wa, lm, wm_
     gm = img.mean(-1, keepdims=True)
     img = np.clip((gm + (img - gm) * 1.10) * 1.04, 0, 1)
-    if LOOK["style"] == "night":                       # a cool, dimmed map
+    if look.style == "night":                          # a cool, dimmed map
         gm = img.mean(-1, keepdims=True)
         img = (gm + (img - gm) * 0.45) * np.array([0.60, 0.76, 1.0], np.float32) * 0.85
-    elif LOOK["style"] == "light":                     # brightened, with less contrast
+    elif look.style == "light":                        # brightened, with less contrast
         img = img ** 0.62
         gm = img.mean(-1, keepdims=True)
         img = gm + (img - gm) * 0.9
-    elif LOOK["style"] == "gray":                     # black and white
+    elif look.style == "gray":                        # black and white
         img = np.repeat(np.clip((img.mean(-1, keepdims=True) - 0.4) * 1.2 + 0.42, 0, 1), 3, -1)
     img = np.clip(img, 0, 1)
     if cache is not None and complete:
-        cache.parent.mkdir(parents=True, exist_ok=True)
-        np.savez(cache, img=to_u8(img), D=D.astype(np.float32), credit=np.array(LOOK.get("credit") or "" if tiles else ""))
+        with whole(cache) as tmp, tmp.open("wb") as f:
+            np.savez(f, img=to_u8(img), D=D.astype(np.float32), credit=np.array(look.credit or "" if tiles else ""))
         for old in sorted(cache.parent.glob("*.npz"), key=lambda q: q.stat().st_mtime)[:-16]:
             old.unlink(missing_ok=True)
-    return img, D
+    return img, D, look

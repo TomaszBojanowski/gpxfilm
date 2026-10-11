@@ -1,14 +1,11 @@
 """Small helpers shared by all modules."""
 from __future__ import annotations
 
-import sys
 from decimal import ROUND_HALF_UP, Decimal
 
 import numpy as np
 
-
-def log(msg: str) -> None:
-    print(msg, file=sys.stderr, flush=True)
+from .task import log  # noqa: F401 – the modules of the engine take it from here
 
 
 def clamp(v, a=0.0, b=1.0):

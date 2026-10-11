@@ -125,6 +125,7 @@ gpxfilm --check-maps
 | `--timezone Europe/Rome` | Strefa czasowa dla godzin |
 | `--music PLIK` | Muzyka w tle |
 | `--size 1920x1080`, `--fps 30` | Rozmiar kadru (tylko 16:9, np. 3840x2160, 1920x1080, 1280x720) i liczba klatek na sekundę |
+| `--codec hevc` | Kodek filmu: `h264` (domyślny, odtwarza się wszędzie) albo `hevc` (około połowy rozmiaru przy tej samej jakości, dla nowszych urządzeń; wymaga ffmpeg z libx265) |
 | `--language en` | Język napisów na filmie: `pl` albo `en` |
 
 Ustawienia, których używasz zawsze, można zapisać w `~/.config/gpxfilm.toml`, pod nazwami opcji bez kresek na początku:
@@ -181,7 +182,6 @@ Plany mogą się zmienić.
 W następnym wydaniu:
 
 - Aplikacja dla macOS z własnym oknem, otwierana dwuklikiem, bez Terminala i karty przeglądarki. Będzie do pobrania jako plik .dmg, bez podpisu Apple.
-- Przebudowany silnik, który działa osobno od okna ustawień, więc okno nigdy się nie zawiesza. Każdą długą czynność da się od razu przerwać, a dowolną chwilę filmu da się narysować bez liczenia filmu od początku.
 
 Później (kolejność nie jest ustalona):
 
